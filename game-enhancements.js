@@ -169,7 +169,7 @@ setSpecificQuestion = function(text){
   if (deck === 'saved' || pickerDeck === 'saved' || libraryFilter === 'saved') {
     deck = found?.categoryKey || found?.category || 'romantic';
   }
-  localQuestionLimit = Number($('#localQuestionCount')?.value || 10);
+  const requestedLimit = Number($('#localQuestionCount')?.value || 10);
   localQuestionPosition = 1;
   localQuestionHistory = [];
   localFirstAnswer = '';
@@ -177,6 +177,13 @@ setSpecificQuestion = function(text){
   localAnswerStage = 1;
   localRevealed = false;
   originalSetSpecificQuestionForLocal(text);
+  const availableQuestions = poolForMode().length || requestedLimit;
+  const validCounts = [5, 10, 15, 20].filter(n => n <= availableQuestions);
+  localQuestionLimit = Math.min(requestedLimit, availableQuestions);
+  if (localQuestionLimit < requestedLimit && validCounts.length) {
+    localQuestionLimit = validCounts[validCounts.length - 1];
+    $('#localQuestionCount').value = String(localQuestionLimit);
+  }
   renderLocalAnswerStage();
 };
 
@@ -215,10 +222,17 @@ createRemoteRoom = async function(){
   button.textContent = 'Creando sala…';
   $('#remoteCreateError').textContent = '';
   try {
+    const topic = $('#remoteCreatorTopic').value;
+    const requestedLimit = Number($('#remoteCreatorCount')?.value || 10);
+    const availableQuestions = topic === 'all' ? allQuestions.length : (sets[topic]?.length || allQuestions.length);
+    const validCounts = [5, 10, 15, 20].filter(n => n <= availableQuestions);
+    let questionLimit = Math.min(requestedLimit, availableQuestions);
+    if (questionLimit < requestedLimit && validCounts.length) questionLimit = validCounts[validCounts.length - 1];
+    $('#remoteCreatorCount').value = String(questionLimit);
     const data = await remoteRequest('create', {
-      topic: $('#remoteCreatorTopic').value,
+      topic,
       name: $('#remoteCreatorName').value.trim(),
-      question_limit: Number($('#remoteCreatorCount')?.value || 10)
+      question_limit: questionLimit
     });
     remoteSession = {code:data.room.code, token:data.token, role:data.role};
     saveRemoteSession();
