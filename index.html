@@ -171,7 +171,7 @@ function randomQuestion(){mode='questions';deck='all';round=1;used.clear();rende
 function init(){
 $('#yearNow').textContent=new Date().getFullYear();renderQuestion();renderLibrary();
 $$('[data-mode]').forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
-$('[data-deck]').forEach(b=>b.addEventListener('click',()=>{deck=b.dataset.deck;mode='questions';round=1;used.clear();$('[data-deck]').forEach(x=>x.classList.toggle('active',x===b));renderQuestion();openQuestionPicker(deck)}));
+$$('[data-deck]').forEach(b=>b.addEventListener('click',()=>{deck=b.dataset.deck;mode='questions';round=1;used.clear();$$('[data-deck]').forEach(x=>x.classList.toggle('active',x===b));renderQuestion();openQuestionPicker(deck)}));
 $('#nextBtn').addEventListener('click',nextQuestion);$('#passBtn').addEventListener('click',()=>{nextQuestion();inlineMessage('Pregunta pasada con cariño. ¡Seguimos!')});$('#shuffleBtn').addEventListener('click',()=>{nextQuestion();toast('Nueva pregunta lista')});$('#saveBtn').addEventListener('click',toggleSave);
 $('#heroRandom').addEventListener('click',randomQuestion);$('#closingBtn').addEventListener('click',randomQuestion);
 $('#player1').addEventListener('input',()=>{updateTurn();if(mode==='who')renderQuestion()});$('#player2').addEventListener('input',()=>{updateTurn();if(mode==='who')renderQuestion()});
