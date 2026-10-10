@@ -99,10 +99,10 @@ function renderLocalAnswerStage(){
   $('#localAnswerReveal').style.display = localRevealed ? 'block' : 'none';
   $('#localAnswerInput').disabled = !!localRevealed;
   $('#localAnswerSubmit').disabled = !!localRevealed;
-  $('#nextBtn').hidden = !localRevealed;
+  $('#nextBtn').style.display = localRevealed ? '' : 'none';
   $('#nextBtn').textContent = localQuestionPosition >= localQuestionLimit ? 'Ver resultado final →' : 'Siguiente pregunta →';
-  $('#passBtn').hidden = true;
-  $('#shuffleBtn').hidden = true;
+  $('#passBtn').style.display = 'none';
+  $('#shuffleBtn').style.display = 'none';
 
   if (localRevealed) {
     $('#localResultName1').textContent = name1;
