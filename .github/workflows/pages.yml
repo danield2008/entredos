@@ -23,6 +23,18 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Aplicar estilos responsive de móvil
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          page = Path("index.html")
+          html = page.read_text(encoding="utf-8")
+          link = '<link rel="stylesheet" href="./mobile.css">'
+          if link not in html:
+              if html.count("</head>") != 1:
+                  raise SystemExit("No se encontró un cierre único de head")
+              page.write_text(html.replace("</head>", link + "</head>", 1), encoding="utf-8")
+          PY
       - name: Preparar archivos estáticos
         uses: actions/upload-pages-artifact@v3
         with:
