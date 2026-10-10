@@ -6,6 +6,8 @@ let localFirstAnswer = "";
 let localSecondAnswer = "";
 let localAnswerStage = 1;
 let localRevealed = false;
+let selectedGameMode = 'questions';
+const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los dos?',truth:'Verdad o reto',memories:'Nuestra historia',date:'Plan de cita sorpresa',deep:'Charla profunda'};
 
 (function installEnhancementMarkup(){
   const playerOne = $('#player1');
@@ -46,6 +48,24 @@ let localRevealed = false;
     control.htmlFor = 'localQuestionCount';
     control.innerHTML = '<span>Preguntas por partida</span><select id="localQuestionCount" aria-label="Número de preguntas"><option value="5">5 preguntas</option><option value="10" selected>10 preguntas</option><option value="15">15 preguntas</option><option value="20">20 preguntas</option></select>';
     pickerFooter.insertBefore(control, $('#pickerRandom'));
+  }
+
+  const createStep = $('[data-remote-step="create"]');
+  if (createStep && !$('#remoteGameModeSummary')) {
+    const summary = document.createElement('div');
+    summary.id = 'remoteGameModeSummary';
+    summary.className = 'remote-mode-summary';
+    summary.innerHTML = '<span>JUEGO SELECCIONADO</span><strong id="remoteGameModeTitle">Preguntas para conectar</strong>';
+    createStep.insertBefore(summary, createStep.firstChild);
+  }
+
+  const remoteQuestion = $('#remoteQuestion');
+  if (remoteQuestion && !$('#remoteModeHelper')) {
+    const helper = document.createElement('p');
+    helper.id = 'remoteModeHelper';
+    helper.className = 'remote-mode-helper';
+    helper.textContent = 'Cada uno responde desde su dispositivo. Las respuestas solo se muestran cuando ambos han enviado la suya.';
+    remoteQuestion.insertAdjacentElement('afterend', helper);
   }
 
   const topicField = $('#remoteCreatorTopic')?.closest('.remote-field');
@@ -246,6 +266,123 @@ nextQuestion = function(){
   renderLocalAnswerStage();
 };
 
+
+/* Hacer que todos los juegos ofrezcan las dos modalidades. */
+const originalStartModeForEveryGame = startMode;
+startMode = function(nextMode) {
+  selectedGameMode = Object.prototype.hasOwnProperty.call(gameModeLabels, nextMode) ? nextMode : 'questions';
+  const result = originalStartModeForEveryGame(nextMode);
+  if (selectedGameMode !== 'questions') {
+    closePlayWindow();
+    openModeChooser('all');
+  }
+  return result;
+};
+
+const originalOpenModeChooserForEveryGame = openModeChooser;
+openModeChooser = function(topic = 'all') {
+  const result = originalOpenModeChooserForEveryGame(topic);
+  const subtitle = $('#modeChooser .choice-head p');
+  if (subtitle) subtitle.textContent = 'Juego seleccionado: ' + (gameModeLabels[selectedGameMode] || gameModeLabels.questions) + '. Elegid si jugar en persona o a distancia.';
+  return result;
+};
+
+$('#chooseInPerson').addEventListener('click', event => {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  closeModeChooser();
+  if (selectedGameMode === 'questions') {
+    openQuestionPicker(chosenModeTopic);
+    return;
+  }
+  mode = selectedGameMode;
+  deck = 'all';
+  round = 1;
+  used.clear();
+  $('[data-deck]').forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
+  $('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
+  renderQuestion();
+  openPlayWindow();
+  renderLocalAnswerStage();
+}, true);
+
+document.addEventListener('click', event => {
+  if (event.target.closest('.deck-filter,[data-picker-deck],.library-filter,[data-library-start],#heroRandom,#closingBtn')) {
+    selectedGameMode = 'questions';
+  }
+}, true);
+
+const originalOpenDistanceSetupForEveryGame = openDistanceSetup;
+openDistanceSetup = function(step = 'options') {
+  const result = originalOpenDistanceSetupForEveryGame(step);
+  const isQuestions = selectedGameMode === 'questions';
+  const topicField = $('#remoteCreatorTopic')?.closest('.remote-field');
+  if (topicField) topicField.hidden = !isQuestions;
+  const summary = $('#remoteGameModeTitle');
+  if (summary) summary.textContent = gameModeLabels[selectedGameMode] || gameModeLabels.questions;
+  const note = $('#remoteGameModeSummary');
+  if (note) note.hidden = step !== 'create';
+  const countControl = $('#remoteCreatorCount')?.closest('.remote-field');
+  if (countControl) countControl.querySelector('span').textContent = 'Preguntas o rondas por partida';
+  const createCopy = $('#showCreateRoom')?.querySelector('small');
+  if (createCopy) createCopy.textContent = isQuestions
+    ? 'Elige el tema y cuántas preguntas jugaréis; después comparte el código.'
+    : 'Crea una sala para este juego y comparte el código con tu pareja.';
+  return result;
+};
+
+const originalRemoteQuestionPoolForEveryGame = remoteQuestionPool;
+remoteQuestionPool = function(room) {
+  const game = room?.game_mode || 'questions';
+  if (game === 'who') return whoPrompts.map(text => ({category:'¿Quién de los dos?', text, kind:'who'}));
+  if (game === 'truth') {
+    const pool = [];
+    const count = Math.max(truthPrompts.length, darePrompts.length);
+    for (let i = 0; i < count; i++) {
+      if (truthPrompts[i]) pool.push({category:'Verdad', text:truthPrompts[i], kind:'truth'});
+      if (darePrompts[i]) pool.push({category:'Reto', text:darePrompts[i], kind:'dare'});
+    }
+    return pool;
+  }
+  if (game === 'memories') return sets.memories.map(text => ({category:'Recuerdos', text, kind:'memories'}));
+  if (game === 'date') return dateIdeas.map(text => ({category:'Plan de cita', text, kind:'date'}));
+  if (game === 'deep') return sets.deep.map(text => ({category:'Charla profunda', text, kind:'deep'}));
+  return originalRemoteQuestionPoolForEveryGame(room);
+};
+
+const originalRenderRemoteStateForEveryGame = renderRemoteState;
+renderRemoteState = function(state) {
+  originalRenderRemoteStateForEveryGame(state);
+  if (!state?.room) return;
+  const room = state.room;
+  const game = room.game_mode || 'questions';
+  const topicName = roomTopicNames[room.topic] || 'Un poco de todo';
+  $('#remoteTopicBadge').textContent = (gameModeLabels[game] || gameModeLabels.questions) + (game === 'questions' && room.topic !== 'all' ? ' · ' + topicName : '');
+  const copy = {
+    questions: 'Responde a la pregunta con tus propias palabras.',
+    who: 'Cada uno elegid a quién describe mejor la frase y explicad por qué.',
+    truth: 'Si es una verdad, contestad con sinceridad. Si es un reto, escribid cómo lo haríais.',
+    memories: 'Compartid el recuerdo que os venga a la mente; no hace falta que sea el mismo.',
+    date: 'Contad qué os parece el plan o cómo lo adaptaríais para los dos.',
+    deep: 'Tomad vuestro tiempo y contestad con sinceridad, sin buscar una respuesta perfecta.'
+  };
+  const q = remoteQuestionPool(room)[Number(room.question_index) || 0];
+  $('#remoteModeHelper').textContent = game === 'truth' && q?.kind === 'dare'
+    ? 'Reto: proponed cómo lo haríais juntos, aunque cada uno esté en su dispositivo.'
+    : (copy[game] || copy.questions);
+  const answerLabel = $('#remoteRound .remote-answer-label');
+  const answer = $('#remoteAnswer');
+  if (answerLabel) answerLabel.textContent = game === 'who' ? '¿A quién eliges?' : game === 'date' ? 'Vuestra idea' : 'Tu respuesta';
+  if (answer && !state.my_submitted) {
+    answer.placeholder = game === 'who' ? 'Persona 1, Persona 2 o ambos…'
+      : game === 'truth' && q?.kind === 'dare' ? 'Escribe cómo responderías al reto…'
+      : game === 'date' ? '¿Qué te parece este plan?…'
+      : game === 'memories' ? 'Cuenta lo que recuerdas…'
+      : game === 'deep' ? 'Escribe tu respuesta sincera…'
+      : 'Escribe lo que piensas…';
+  }
+};
+
 const originalCreateRemoteRoomForLimit = createRemoteRoom;
 createRemoteRoom = async function(){
   const button = $('#createRemoteRoom');
@@ -253,15 +390,16 @@ createRemoteRoom = async function(){
   button.textContent = 'Creando sala…';
   $('#remoteCreateError').textContent = '';
   try {
-    const topic = $('#remoteCreatorTopic').value;
+    const topic = selectedGameMode === 'questions' ? $('#remoteCreatorTopic').value : 'all';
     const requestedLimit = Number($('#remoteCreatorCount')?.value || 10);
-    const availableQuestions = topic === 'all' ? allQuestions.length : (sets[topic]?.length || allQuestions.length);
+    const availableQuestions = remoteQuestionPool({game_mode:selectedGameMode,topic}).length;
     const validCounts = [5, 10, 15, 20].filter(n => n <= availableQuestions);
     let questionLimit = Math.min(requestedLimit, availableQuestions);
     if (questionLimit < requestedLimit && validCounts.length) questionLimit = validCounts[validCounts.length - 1];
     $('#remoteCreatorCount').value = String(questionLimit);
     const data = await remoteRequest('create', {
       topic,
+      game_mode: selectedGameMode,
       name: $('#remoteCreatorName').value.trim(),
       question_limit: questionLimit
     });
