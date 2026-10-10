@@ -88,3 +88,6 @@
 .remote-mode-helper{margin:10px 0 18px;padding:11px 13px;border-radius:12px;background:#f8f1f8;color:#7d6f82;font-size:11px;line-height:1.65}
 .remote-mode-helper:empty{display:none}
 @media(max-width:680px){.remote-mode-summary{padding:11px 12px}.remote-mode-helper{margin:8px 0 14px}}
+
+.local-mode-count-control{width:min(260px,100%);margin:4px 0 13px}
+.local-mode-count-control small{font-size:10px;color:#84768a;font-weight:700}
