@@ -60,5 +60,24 @@
  .remote-code-banner .remote-code-actions .btn{min-height:44px;width:100%}
 }
 
-/* Ocultar los campos de nombres: el juego usa Persona 1 y Persona 2. */
-.player-settings{display:none!important}
+
+/* Guía visual para que el primer uso sea sencillo. */
+.start-guide{margin:0 0 20px;padding:19px 20px;border:1px solid #e7dfe5;border-radius:20px;background:linear-gradient(120deg,#fffdfb,#f7f0f7);color:#302438}
+.start-guide-heading{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.start-guide-heading>span,.player-name-guide>strong{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#a66d8a;font-weight:900}
+.start-guide-heading>strong{font-family:Georgia,"Times New Roman",serif;font-size:clamp(19px,2.5vw,24px);font-weight:500;letter-spacing:-.025em}
+.start-guide-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.start-guide-step{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.start-guide-step>span{display:grid;place-items:center;flex:0 0 27px;height:27px;border-radius:50%;background:#eaddea;color:#684573;font-size:11px;font-weight:900}
+.start-guide-step>div{display:grid;gap:4px}
+.start-guide-step strong{font-size:12px;color:#47374f}
+.start-guide-step small{font-size:11px;line-height:1.55;color:#7d7182}
+.player-name-guide{display:flex;align-items:flex-start;gap:9px;margin:-6px 0 14px;padding:10px 12px;border-radius:12px;background:#f8f1f7;color:#7d7182;font-size:11px;line-height:1.6}
+.player-name-guide>strong{flex:0 0 auto;padding-top:2px}
+.player-name-guide>span{min-width:0}
+@media(max-width:680px){
+ .start-guide{padding:16px 14px;border-radius:16px}
+ .start-guide-steps{grid-template-columns:1fr;gap:11px}
+ .start-guide-step small{font-size:11px}
+ .player-name-guide{flex-direction:column;gap:4px;margin-top:0}
+}
