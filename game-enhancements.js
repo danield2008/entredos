@@ -7,6 +7,9 @@ let localSecondAnswer = "";
 let localAnswerStage = 1;
 let localRevealed = false;
 let selectedGameMode = 'questions';
+let localModeQuestionLimit = 10;
+let localModeQuestionPosition = 1;
+let localModeQuestionHistory = [];
 const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los dos?',truth:'Verdad o reto',memories:'Nuestra historia',date:'Plan de cita sorpresa',deep:'Charla profunda'};
 
 (function installEnhancementMarkup(){
@@ -41,6 +44,17 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
   if (createRoomCopy) createRoomCopy.textContent = 'Elige el tema y el número de preguntas, crea la sala y comparte el código que aparece.';
   const joinRoomCopy = $('#showJoinRoom')?.querySelector('small');
   if (joinRoomCopy) joinRoomCopy.textContent = 'Si te han enviado un código de seis caracteres, introdúcelo en el siguiente paso para entrar.';
+  const nameGuideElement = $('#playerNameGuide');
+  if (nameGuideElement && !$('#localModeCountControl')) {
+    const modeCount = document.createElement('label');
+    modeCount.id = 'localModeCountControl';
+    modeCount.className = 'question-count-control local-mode-count-control';
+    modeCount.htmlFor = 'localModeCount';
+    modeCount.style.display = 'none';
+    modeCount.innerHTML = '<span>Rondas por partida</span><select id="localModeCount" aria-label="Número de rondas"><option value="5">5 rondas</option><option value="10" selected>10 rondas</option><option value="15">15 rondas</option><option value="20">20 rondas</option></select><small id="localModeCountHint">Ronda 1 de 10</small>';
+    nameGuideElement.insertAdjacentElement('afterend', modeCount);
+  }
+
   const pickerFooter = $('.question-picker .picker-footer');
   if (pickerFooter && !$('#localQuestionCount')) {
     const control = document.createElement('label');
@@ -214,6 +228,85 @@ function showLocalFinalResults(){
   $('#jugar')?.classList.remove('local-question-active');
 }
 
+
+function renderLocalModeCountControl(){
+  const control = $('#localModeCountControl');
+  if (!control) return;
+  const active = mode !== 'questions' && $('#jugar')?.classList.contains('play-open') && $('#localFinalResults')?.style.display !== 'block';
+  control.style.display = active ? 'flex' : 'none';
+  const hint = $('#localModeCountHint');
+  if (hint) hint.textContent = 'Ronda ' + Math.min(localModeQuestionPosition, localModeQuestionLimit) + ' de ' + localModeQuestionLimit;
+}
+
+function resetLocalModeSession(){
+  localModeQuestionPosition = 1;
+  localModeQuestionHistory = [];
+  const requested = Number($('#localModeCount')?.value || 10);
+  const available = poolForMode().length || requested;
+  const validCounts = [5,10,15,20].filter(n => n <= available);
+  localModeQuestionLimit = Math.min(requested, available);
+  if (localModeQuestionLimit < requested && validCounts.length) localModeQuestionLimit = validCounts[validCounts.length - 1];
+  if ($('#localModeCount')) $('#localModeCount').value = String(localModeQuestionLimit);
+  renderLocalModeCountControl();
+}
+
+function restoreLocalGameView(){
+  const final = $('#localFinalResults');
+  if (final) final.style.display = 'none';
+  const promptCard = $('#promptText')?.closest('.prompt-card');
+  if (promptCard) promptCard.style.display = '';
+  const progress = $('#progressBar')?.closest('.progress-wrap');
+  if (progress) progress.style.display = '';
+  const actions = $('#saveBtn')?.closest('.game-actions');
+  if (actions) actions.style.display = '';
+  const toastInline = $('#toastInline');
+  if (toastInline) toastInline.style.display = '';
+  const extra = $('#modeExtra');
+  if (extra) extra.style.display = '';
+  renderLocalModeCountControl();
+}
+
+function showOtherModeFinalResults(){
+  const promptCard = $('#promptText')?.closest('.prompt-card');
+  const progress = $('#progressBar')?.closest('.progress-wrap');
+  const actions = $('#saveBtn')?.closest('.game-actions');
+  const toastInline = $('#toastInline');
+  if (promptCard) promptCard.style.display = 'none';
+  if (progress) progress.style.display = 'none';
+  if (actions) actions.style.display = 'none';
+  if (toastInline) toastInline.style.display = 'none';
+  const extra = $('#modeExtra');
+  if (extra) extra.style.display = 'none';
+  const station = $('#localAnswerStation');
+  if (station) station.style.display = 'none';
+  const control = $('#localModeCountControl');
+  if (control) control.style.display = 'none';
+  const final = $('#localFinalResults');
+  if (!final) return;
+  final.style.display = 'block';
+  const heading = $('#localFinalResults .local-result-heading h2');
+  if (heading) heading.textContent = '¡Habéis jugado juntos!';
+  $('#localFinalSummary').textContent = 'Habéis completado ' + localModeQuestionHistory.length + ' rondas de ' + (gameModeLabels[mode] || 'vuestro juego') + '. Podéis volver a jugar con otro tema o probar otro modo.';
+  $('#localFinalList').innerHTML = localModeQuestionHistory.map((item,i) =>
+    '<article class="local-final-item"><div class="local-final-item-title"><span>Ronda ' + (i+1) + ' · ' + escapeLocalResult(item.category) + '</span><strong>' + escapeLocalResult(item.question) + '</strong></div></article>'
+  ).join('');
+  $('#jugar')?.classList.remove('local-question-active');
+}
+
+$('#localModeCount')?.addEventListener('change', () => {
+  if (mode === 'questions') return;
+  const requested = Number($('#localModeCount').value || 10);
+  const available = poolForMode().length || requested;
+  const validCounts = [5,10,15,20].filter(n => n <= available);
+  localModeQuestionLimit = Math.min(requested, available);
+  if (localModeQuestionLimit < requested && validCounts.length) {
+    localModeQuestionLimit = validCounts[validCounts.length - 1];
+    $('#localModeCount').value = String(localModeQuestionLimit);
+    toast('Este modo tiene menos opciones; hemos ajustado el número de rondas.');
+  }
+  renderLocalModeCountControl();
+});
+
 const originalSetSpecificQuestionForLocal = setSpecificQuestion;
 setSpecificQuestion = function(text){
   const found = allQuestions.find(x => x.text === text) || saved.find(x => x.text === text);
@@ -248,22 +341,34 @@ choosePickerQuestion = function(q){
 
 const originalNextQuestionForLocal = nextQuestion;
 nextQuestion = function(){
-  if (mode !== 'questions' || !$('#jugar')?.classList.contains('local-question-active')) {
-    return originalNextQuestionForLocal();
-  }
-  if (!localRevealed) { toast('Primero tenéis que responder los dos.'); return; }
-  if (localQuestionPosition >= localQuestionLimit) {
-    showLocalFinalResults();
+  if (mode === 'questions' && $('#jugar')?.classList.contains('local-question-active')) {
+    if (!localRevealed) { toast('Primero tenéis que responder los dos.'); return; }
+    if (localQuestionPosition >= localQuestionLimit) {
+      showLocalFinalResults();
+      return;
+    }
+    localQuestionPosition += 1;
+    round += 1;
+    localFirstAnswer = '';
+    localSecondAnswer = '';
+    localAnswerStage = 1;
+    localRevealed = false;
+    renderQuestion();
+    renderLocalAnswerStage();
     return;
   }
-  localQuestionPosition += 1;
-  round += 1;
-  localFirstAnswer = '';
-  localSecondAnswer = '';
-  localAnswerStage = 1;
-  localRevealed = false;
-  renderQuestion();
-  renderLocalAnswerStage();
+  if (mode !== 'questions' && $('#jugar')?.classList.contains('play-open')) {
+    localModeQuestionHistory.push({question:current?.text || '',category:current?.category || 'Ronda'});
+    if (localModeQuestionPosition >= localModeQuestionLimit) {
+      showOtherModeFinalResults();
+      return;
+    }
+    localModeQuestionPosition += 1;
+    originalNextQuestionForLocal();
+    renderLocalModeCountControl();
+    return;
+  }
+  return originalNextQuestionForLocal();
 };
 
 
@@ -301,9 +406,12 @@ $('#chooseInPerson').addEventListener('click', event => {
   used.clear();
   $('[data-deck]').forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
   $('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
+  restoreLocalGameView();
+  resetLocalModeSession();
   renderQuestion();
   openPlayWindow();
   renderLocalAnswerStage();
+  renderLocalModeCountControl();
 }, true);
 
 document.addEventListener('click', event => {
