@@ -15,8 +15,18 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
 (function installEnhancementMarkup(){
   const playerOne = $('#player1');
   const playerTwo = $('#player2');
-  if (playerOne) { playerOne.value = ''; playerOne.placeholder = 'Ej. Alex'; }
-  if (playerTwo) { playerTwo.value = ''; playerTwo.placeholder = 'Ej. Sam'; }
+  if (playerOne) {
+    playerOne.value = '';
+    playerOne.placeholder = 'Escribe el nombre del chico';
+    const label = playerOne.closest('label');
+    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre del chico';
+  }
+  if (playerTwo) {
+    playerTwo.value = '';
+    playerTwo.placeholder = 'Escribe el nombre de la chica';
+    const label = playerTwo.closest('label');
+    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la chica';
+  }
 
   const gameGrid = $('#juegos .game-grid');
   if (gameGrid && !$('#startHereGuide')) {
