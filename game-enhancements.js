@@ -10,8 +10,35 @@ let localRevealed = false;
 (function installEnhancementMarkup(){
   const playerOne = $('#player1');
   const playerTwo = $('#player2');
-  if (playerOne) playerOne.value = 'Persona 1';
-  if (playerTwo) playerTwo.value = 'Persona 2';
+  if (playerOne) { playerOne.value = ''; playerOne.placeholder = 'Ej. Alex'; }
+  if (playerTwo) { playerTwo.value = ''; playerTwo.placeholder = 'Ej. Sam'; }
+
+  const gameGrid = $('#juegos .game-grid');
+  if (gameGrid && !$('#startHereGuide')) {
+    const guide = document.createElement('aside');
+    guide.id = 'startHereGuide';
+    guide.className = 'start-guide';
+    guide.innerHTML = '<div class="start-guide-heading"><span>GUÍA RÁPIDA</span><strong>¿Es vuestra primera vez? Seguid estos 3 pasos.</strong></div><div class="start-guide-steps"><div class="start-guide-step"><span>1</span><div><strong>Elegid un juego</strong><small>Pulsad una de las tarjetas de abajo o el botón «Empezar juntos».</small></div></div><div class="start-guide-step"><span>2</span><div><strong>Elegid cómo jugar</strong><small>En persona si compartís dispositivo; a distancia si cada uno usa el suyo.</small></div></div><div class="start-guide-step"><span>3</span><div><strong>Seguid las indicaciones</strong><small>Poned vuestros nombres si queréis. A distancia, una persona comparte el código y la otra lo introduce.</small></div></div></div>';
+    gameGrid.insertAdjacentElement('beforebegin', guide);
+  }
+
+  const playerSettings = $('.play-board .player-settings');
+  if (playerSettings && !$('#playerNameGuide')) {
+    const nameGuide = document.createElement('div');
+    nameGuide.id = 'playerNameGuide';
+    nameGuide.className = 'player-name-guide';
+    nameGuide.innerHTML = '<strong>ANTES DE JUGAR</strong><span>Escribid vuestros nombres en los campos de arriba (es opcional). Después elegid un tema. La pantalla os irá diciendo a quién le toca y qué hacer.</span>';
+    playerSettings.insertAdjacentElement('afterend', nameGuide);
+  }
+
+  const inPersonCopy = $('#chooseInPerson')?.querySelector('small');
+  if (inPersonCopy) inPersonCopy.textContent = 'Usáis el mismo móvil u ordenador. Podréis poner vuestros nombres y responder por turnos.';
+  const remoteCopy = $('#chooseRemote')?.querySelector('small');
+  if (remoteCopy) remoteCopy.textContent = 'Cada uno usa su propio dispositivo. Una persona crea la sala y comparte el código; la otra lo introduce para unirse.';
+  const createRoomCopy = $('#showCreateRoom')?.querySelector('small');
+  if (createRoomCopy) createRoomCopy.textContent = 'Elige el tema y el número de preguntas, crea la sala y comparte el código que aparece.';
+  const joinRoomCopy = $('#showJoinRoom')?.querySelector('small');
+  if (joinRoomCopy) joinRoomCopy.textContent = 'Si te han enviado un código de seis caracteres, introdúcelo en el siguiente paso para entrar.';
   const pickerFooter = $('.question-picker .picker-footer');
   if (pickerFooter && !$('#localQuestionCount')) {
     const control = document.createElement('label');
