@@ -56,6 +56,29 @@ section.section{padding:86px 0}.section-top{display:flex;justify-content:space-b
 body.picker-open{overflow:hidden}
 @media(max-width:600px){.question-picker{padding:0;align-items:stretch}.question-picker-panel{width:100%;max-height:100dvh;min-height:100dvh;border-radius:0;border:0;padding:22px 16px 18px}.picker-head h2{font-size:30px}.picker-list{grid-template-columns:1fr;gap:8px}.picker-question{min-height:0;padding:13px}.picker-question-text{font-size:17px}.picker-footer{align-items:stretch;flex-direction:column}.picker-footer .btn{width:100%}.picker-list-top span:last-child{display:none}}
 </style>
+<style>
+/* El juego se muestra en una ventana grande solo al elegir una pregunta o un modo. */
+#jugar{display:none}
+#jugar.play-open{display:flex;position:fixed;inset:0;z-index:95;overflow-y:auto;box-sizing:border-box;align-items:center;justify-content:center;padding:20px!important;background:rgba(46,29,55,.94);backdrop-filter:blur(10px)}
+#jugar.play-open .play-layout{display:block;width:min(1120px,100%);max-width:1120px;margin:auto;gap:0}
+#jugar.play-open .play-copy{display:none}
+#jugar.play-open .play-board{width:100%;max-width:1120px;margin:0 auto;max-height:calc(100dvh - 40px);overflow-y:auto;padding:clamp(20px,3vw,38px);border-radius:30px;box-shadow:0 30px 100px #12091970}
+#jugar.play-open .prompt-card{min-height:clamp(340px,48vh,490px);padding:clamp(24px,4vw,48px)}
+#jugar.play-open .prompt-text{font-size:clamp(34px,4.5vw,56px);line-height:1.16;max-width:950px}
+#jugar.play-open .board-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#jugar.play-open .board-actions #playClose{border-color:#eadfe9;background:#fff;color:#65566d}
+#jugar.play-open .board-actions #playClose:hover{background:#f2e9f3;color:#4a3158}
+body.play-open{overflow:hidden}
+@media(max-width:680px){
+#jugar.play-open{padding:0!important;align-items:stretch}
+#jugar.play-open .play-layout{width:100%;margin:0}
+#jugar.play-open .play-board{max-height:100dvh;min-height:100dvh;border-radius:0;padding:18px 15px 24px}
+#jugar.play-open .prompt-card{min-height:clamp(300px,44vh,430px);padding:22px}
+#jugar.play-open .prompt-text{font-size:clamp(30px,8vw,39px);margin:22px 0}
+#jugar.play-open .board-top{align-items:flex-start;flex-direction:row}
+#jugar.play-open .board-actions{justify-content:flex-end}
+}
+</style>
 </head>
 <body>
 <header>
@@ -81,7 +104,7 @@ body.picker-open{overflow:hidden}
   <button class="game-card" data-mode="deep"><span class="game-icon">☾</span><h3>Una charla sin filtros</h3><p>Preguntas un poco más profundas para hablar de necesidades, sueños, límites y futuro.</p><div class="game-footer"><span>PROFUNDO · CON CONFIANZA</span><span class="game-arrow">↗</span></div></button>
 </div></div></section>
 <section class="section play-section" id="jugar"><div class="container play-layout"><div class="play-copy"><div class="eyebrow">Vuestro momento empieza aquí</div><h2>Dejad el móvil.<br>Quedaos con <em>la pregunta.</em></h2><p>Elegid un tema, poneos cómodos y turnaos para responder. Podéis pasar cualquier pregunta: no se trata de ganar, sino de escucharos de verdad.</p><div class="play-facts"><span><i class="check">✓</i> No hay respuestas correctas</span><span><i class="check">✓</i> Podéis saltar cualquier turno</span><span><i class="check">✓</i> No guardamos vuestras respuestas</span></div></div>
-<div class="play-board"><div class="board-top"><div><div class="turn-label" id="roundLabel">Ronda 1 · Pregunta para conectar</div><div class="player-pills"><span class="player-pill" id="turnPill">Turno de Alex</span><span class="player-pill p2" id="modePill">Conexión</span></div></div><button class="icon-btn" id="shuffleBtn" type="button" aria-label="Cambiar pregunta">↻ Mezclar</button></div>
+<div class="play-board"><div class="board-top"><div><div class="turn-label" id="roundLabel">Ronda 1 · Pregunta para conectar</div><div class="player-pills"><span class="player-pill" id="turnPill">Turno de Alex</span><span class="player-pill p2" id="modePill">Conexión</span></div></div><div class="board-actions"><button class="icon-btn" id="shuffleBtn" type="button" aria-label="Cambiar pregunta">↻ Mezclar</button><button class="icon-btn" id="playClose" type="button" aria-label="Cerrar juego">× Cerrar</button></div></div>
 <div class="player-settings"><label>Nombre de la persona 1<input id="player1" type="text" maxlength="20" value="Alex" autocomplete="off"></label><label>Nombre de la persona 2<input id="player2" type="text" maxlength="20" value="Sam" autocomplete="off"></label></div>
 <div class="deck-controls" aria-label="Selecciona un tema"><button class="deck-filter active" data-deck="all">Un poco de todo</button><button class="deck-filter" data-deck="romantic">Románticas</button><button class="deck-filter" data-deck="fun">Divertidas</button><button class="deck-filter" data-deck="deep">Profundas</button><button class="deck-filter" data-deck="memories">Recuerdos</button><button class="deck-filter" data-deck="future">Futuro</button></div>
 <div class="prompt-card" aria-live="polite"><div class="prompt-meta"><span id="promptCategory">PREGUNTA PARA CONECTAR</span><span class="prompt-heart">♡</span></div><div class="prompt-text" id="promptText">¿Qué pequeño gesto mío te hace sentir más querido/a?</div><div class="prompt-bottom"><span id="promptCounter">01 / 12</span><span id="promptHint">Escuchad sin interrumpir.</span></div></div>
@@ -111,7 +134,7 @@ body.picker-open{overflow:hidden}
       <button type="button" data-picker-deck="fun">Divertidas</button>
       <button type="button" data-picker-deck="deep">Profundas</button>
       <button type="button" data-picker-deck="memories">Recuerdos</button>
-      <button type="button" data-picker-deck="future">Futuro</button>
+      <button type="button" data-picker-deck="future">Futuro</button><button type="button" data-picker-deck="saved">♡ Guardadas</button>
     </div>
     <label class="picker-search"><span>⌕</span><input id="pickerSearch" type="search" placeholder="Buscar entre las preguntas…" autocomplete="off"></label>
     <div class="picker-list-top"><span id="pickerCount">Preguntas disponibles</span><span>Elige una para jugar ↘</span></div>
@@ -154,30 +177,32 @@ function updateTurn(){const turn=$('#turnPill');if(turn)turn.textContent='Turno 
 function updateSavedButton(){const isSaved=current&&saved.some(x=>x.text===current.text);$('#saveBtn').classList.toggle('saved',!!isSaved);$('#saveBtn').textContent=isSaved?'♥ Guardada':'♡ Guardar pregunta'}
 function renderQuestion(){current=chooseItem();if(!current)return;$('#promptCategory').textContent=current.category.toUpperCase();$('#promptText').textContent=current.text;$('#promptHint').textContent=mode==='who'?'Elegid una respuesta a la vez.':mode==='truth'?'Podéis elegir verdad o reto.':mode==='date'?'Adaptad la idea a vuestro estilo.':'Escuchad sin interrumpir.';const extra=$('#modeExtra');extra.classList.toggle('show',mode==='who');if(mode==='who'){$('#extraPrompt').textContent='¿A quién describe mejor esta frase?';$('#choiceButtons').innerHTML='<button data-choice="p1">'+escapeHTML(p1())+'</button><button data-choice="both">A los dos</button><button data-choice="p2">'+escapeHTML(p2())+'</button>'}else if(mode==='truth'){$('#extraPrompt').textContent='Elegid con qué os apetece seguir:';$('#choiceButtons').innerHTML='<button data-truth="truth">Otra verdad</button><button data-truth="dare">Un reto</button>';extra.classList.add('show')}else if(extra){extra.classList.remove('show')}updateSavedButton();updateTurn();inlineMessage('');}
 function escapeHTML(str){return String(str).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
-function startMode(newMode){mode=newMode;round=1;used.clear();if(newMode==='questions')deck='all';$$('[data-deck]').forEach(b=>b.classList.toggle('active',b.dataset.deck===deck));$$('[data-mode]').forEach(b=>b.classList.toggle('selected',b.dataset.mode===mode));renderQuestion();$('#jugar').scrollIntoView({behavior:'smooth',block:'start'});if(newMode==='questions')openQuestionPicker('all');}
+function startMode(newMode){mode=newMode;round=1;used.clear();if(newMode==='questions')deck='all';$$('[data-deck]').forEach(b=>b.classList.toggle('active',b.dataset.deck===deck));$$('[data-mode]').forEach(b=>b.classList.toggle('selected',b.dataset.mode===mode));renderQuestion();if(newMode==='questions')openQuestionPicker('all');else openPlayWindow();}
 function nextQuestion(){round++;if(mode==='truth'&&current?.kind==='truth'||mode==='truth'&&current?.kind==='dare'){const pool=current.kind==='truth'?darePrompts:truthPrompts;current={category:current.kind==='truth'?'Reto':'Verdad',text:pool[Math.floor(Math.random()*pool.length)],kind:current.kind==='truth'?'dare':'truth'};$('#promptCategory').textContent=current.category.toUpperCase();$('#promptText').textContent=current.text;$('#promptHint').textContent='Una ronda más, a vuestro ritmo.';updateSavedButton();updateTurn();inlineMessage('');return}renderQuestion()}
 function persistSaved(){try{localStorage.setItem('entredos-saved',JSON.stringify(saved))}catch(e){}renderLibrary()}
 function toggleSave(){if(!current)return;const idx=saved.findIndex(x=>x.text===current.text);if(idx>=0){saved.splice(idx,1);toast('Pregunta eliminada de guardadas')}else{saved.unshift({text:current.text,category:current.category,categoryKey:current.categoryKey||'romantic'});toast('Pregunta guardada en este navegador')}persistSaved();updateSavedButton()}
 function renderLibrary(){const q=($('#questionSearch').value||'').trim().toLowerCase();let list=libraryFilter==='saved'?saved:allQuestions.filter(x=>(libraryFilter==='all'||x.category===libraryFilter)&&(!q||(x.text+' '+(categoryNames[x.category]||'')).toLowerCase().includes(q)));if(libraryFilter==='saved'&&q)list=list.filter(x=>x.text.toLowerCase().includes(q));const grid=$('#questionGrid');const shown=list.slice(0,visibleCount);grid.innerHTML=shown.map(x=>'<article class="question-item"><span class="tagline">'+escapeHTML(categoryNames[x.category]||x.category||'Guardada')+'</span><p>'+escapeHTML(x.text)+'</p><button type="button" data-library-start="'+escapeHTML(x.text)+'">Usar esta pregunta ↗</button></article>').join('')||'<div class="empty-state">'+(libraryFilter==='saved'?'Todavía no habéis guardado preguntas. En el juego podéis guardar las que queráis repetir.':'No hemos encontrado preguntas con ese término. Probá con otra palabra.')+'</div>';$('#showMoreBtn').hidden=list.length<=visibleCount;}
 function setLibraryFilter(f){libraryFilter=f;visibleCount=9;$$('.library-filter').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));if(f==='saved'){$('#questionSearch').placeholder='Buscar entre las guardadas…'}else{$('#questionSearch').placeholder='Buscar por tema, palabra o sensación…'}renderLibrary()}
-function setSpecificQuestion(text){const found=allQuestions.find(x=>x.text===text)||saved.find(x=>x.text===text);current={category:found?.category||'Guardada',text,categoryKey:found?.category||'romantic'};mode='questions';round=1;$('#promptCategory').textContent=current.category.toUpperCase();$('#promptText').textContent=current.text;$('#promptHint').textContent='Escuchad sin interrumpir.';$('#modeExtra').classList.remove('show');updateTurn();updateSavedButton();$('#jugar').scrollIntoView({behavior:'smooth',block:'start'});}
-function pickerPool(){const q=($('#pickerSearch').value||'').trim().toLowerCase();return allQuestions.filter(x=>(pickerDeck==='all'||x.category===pickerDeck)&&(!q||(x.text+' '+(categoryNames[x.category]||'')).toLowerCase().includes(q)))}
+function setSpecificQuestion(text){const found=allQuestions.find(x=>x.text===text)||saved.find(x=>x.text===text);current={category:found?.category||'Guardada',text,categoryKey:found?.categoryKey||found?.category||'romantic'};mode='questions';round=1;$('#promptCategory').textContent=current.category.toUpperCase();$('#promptText').textContent=current.text;$('#promptHint').textContent='Escuchad sin interrumpir.';$('#modeExtra').classList.remove('show');updateTurn();updateSavedButton();openPlayWindow();}
+function pickerPool(){const q=($('#pickerSearch').value||'').trim().toLowerCase();const source=pickerDeck==='saved'?saved:allQuestions.filter(x=>pickerDeck==='all'||x.category===pickerDeck);return source.filter(x=>(x.text+' '+(categoryNames[x.category]||x.category||'')).toLowerCase().includes(q))}
 function renderPicker(){pickerRenderedQuestions=pickerPool();$('#pickerCount').textContent=pickerRenderedQuestions.length+' preguntas';$('#pickerList').innerHTML=pickerRenderedQuestions.map((x,i)=>'<button class="picker-question" type="button" data-picker-index="'+i+'"><span class="picker-question-number">'+String(i+1).padStart(2,'0')+'</span><span class="picker-question-text">'+escapeHTML(x.text)+'</span><span class="picker-question-arrow">↗</span></button>').join('')||'<div class="picker-empty">No hay preguntas con ese término. Prueba otra búsqueda o tema.</div>';$$('[data-picker-deck]').forEach(b=>b.classList.toggle('active',b.dataset.pickerDeck===pickerDeck));}
 function openQuestionPicker(which='all'){pickerDeck=which||'all';$('#pickerSearch').value='';renderPicker();$('#questionPicker').classList.add('open');$('#questionPicker').setAttribute('aria-hidden','false');document.body.classList.add('picker-open');$('#pickerClose').focus();}
 function closeQuestionPicker(){const picker=$('#questionPicker');if(!picker)return;picker.classList.remove('open');picker.setAttribute('aria-hidden','true');document.body.classList.remove('picker-open');}
+function openPlayWindow(){const panel=$('#jugar');if(!panel)return;panel.classList.add('play-open');document.body.classList.add('play-open');$('#playClose').focus();}
+function closePlayWindow(){const panel=$('#jugar');if(panel)panel.classList.remove('play-open');document.body.classList.remove('play-open');}
 function choosePickerQuestion(q){if(!q)return;deck=pickerDeck;$$('[data-deck]').forEach(b=>b.classList.toggle('active',b.dataset.deck===deck));closeQuestionPicker();setSpecificQuestion(q.text);}
 
 function shareQuestion(){if(!current)return;const text='Nuestra pregunta en EntreDos: «'+current.text+'»';if(navigator.share){navigator.share({title:'EntreDos — pregunta para dos',text}).catch(()=>{});return}if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(()=>toast('Pregunta copiada para compartir')).catch(()=>toast(text));return}toast(text)}
-function randomQuestion(){mode='questions';deck='all';round=1;used.clear();renderQuestion();$('#jugar').scrollIntoView({behavior:'smooth',block:'start'})}
+function randomQuestion(){mode='questions';deck='all';round=1;used.clear();renderQuestion();openPlayWindow()}
 function init(){
 $('#yearNow').textContent=new Date().getFullYear();renderQuestion();renderLibrary();
-$$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
-$$$('[data-deck]').forEach(b=>b.addEventListener('click',()=>{deck=b.dataset.deck;mode='questions';round=1;used.clear();$$$('[data-deck]').forEach(x=>x.classList.toggle('active',x===b));renderQuestion();openQuestionPicker(deck)}));
+$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
+$$('[data-deck]').forEach(b=>b.addEventListener('click',()=>{deck=b.dataset.deck;mode='questions';round=1;used.clear();$$('[data-deck]').forEach(x=>x.classList.toggle('active',x===b));renderQuestion();openQuestionPicker(deck)}));
 $('#nextBtn').addEventListener('click',nextQuestion);$('#passBtn').addEventListener('click',()=>{nextQuestion();inlineMessage('Pregunta pasada con cariño. ¡Seguimos!')});$('#shuffleBtn').addEventListener('click',()=>{nextQuestion();toast('Nueva pregunta lista')});$('#saveBtn').addEventListener('click',toggleSave);
 $('#heroRandom').addEventListener('click',randomQuestion);$('#closingBtn').addEventListener('click',randomQuestion);
 $('#player1').addEventListener('input',()=>{updateTurn();if(mode==='who')renderQuestion()});$('#player2').addEventListener('input',()=>{updateTurn();if(mode==='who')renderQuestion()});
 $('#choiceButtons').addEventListener('click',e=>{const ch=e.target.closest('[data-choice]');if(ch){$$('[data-choice]').forEach(b=>b.classList.toggle('chosen',b===ch));inlineMessage('¡Perfecto! Ahora contad por qué habéis elegido esa respuesta.');return}const truth=e.target.closest('[data-truth]');if(truth){const arr=truth.dataset.truth==='truth'?truthPrompts:darePrompts;current={category:truth.dataset.truth==='truth'?'Verdad':'Reto',text:arr[Math.floor(Math.random()*arr.length)],kind:truth.dataset.truth};$('#promptCategory').textContent=current.category.toUpperCase();$('#promptText').textContent=current.text;$('#promptHint').textContent='A vuestro ritmo: siempre podéis pasar.';updateSavedButton();updateTurn();inlineMessage('');}});
-$$('.library-filter').forEach(b=>b.addEventListener('click',()=>setLibraryFilter(b.dataset.filter)));
+$$('.library-filter').forEach(b=>b.addEventListener('click',()=>{setLibraryFilter(b.dataset.filter);openQuestionPicker(b.dataset.filter==='saved'?'saved':b.dataset.filter)}));
 $('#questionSearch').addEventListener('input',()=>{visibleCount=9;renderLibrary()});$('#showMoreBtn').addEventListener('click',()=>{visibleCount+=9;renderLibrary()});
 $('#questionGrid').addEventListener('click',e=>{const b=e.target.closest('[data-library-start]');if(b)setSpecificQuestion(b.dataset.libraryStart)});
 $('#dateIdeaBtn').addEventListener('click',()=>{$('#dateIdeaText').textContent=dateIdeas[Math.floor(Math.random()*dateIdeas.length)]});
@@ -185,9 +210,9 @@ $('#pickerTabs').addEventListener('click',e=>{const b=e.target.closest('[data-pi
 $('#pickerSearch').addEventListener('input',renderPicker);
 $('#pickerList').addEventListener('click',e=>{const b=e.target.closest('[data-picker-index]');if(!b)return;choosePickerQuestion(pickerRenderedQuestions[Number(b.dataset.pickerIndex)])});
 $('#pickerRandom').addEventListener('click',()=>{const pool=pickerPool();if(!pool.length){toast('No hay preguntas para elegir');return}choosePickerQuestion(pool[Math.floor(Math.random()*pool.length)])});
-$('#pickerClose').addEventListener('click',closeQuestionPicker);
+$('#pickerClose').addEventListener('click',closeQuestionPicker);$('#playClose').addEventListener('click',closePlayWindow);$('#jugar').addEventListener('click',e=>{if(e.target===$('#jugar'))closePlayWindow()});
 $('#questionPicker').addEventListener('click',e=>{if(e.target.closest('[data-picker-close]'))closeQuestionPicker()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeQuestionPicker()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeQuestionPicker();closePlayWindow()}});
 
 $('#menuToggle').addEventListener('click',()=>{const n=$('#navLinks'),open=n.classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open));$('#menuToggle').textContent=open?'×':'☰'});$$('#navLinks a').forEach(a=>a.addEventListener('click',()=>{$('#navLinks').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false');$('#menuToggle').textContent='☰'}));
 const deckNow=new URLSearchParams(location.search).get('play');if(deckNow&&['questions','who','truth','memories','date','deep'].includes(deckNow)){startMode(deckNow)}
