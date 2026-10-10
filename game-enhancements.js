@@ -16,13 +16,11 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
   const playerOne = $('#player1');
   const playerTwo = $('#player2');
   if (playerOne) {
-    playerOne.value = 'Leo';
     playerOne.placeholder = 'Ej. Leo';
     const label = playerOne.closest('label');
     if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la persona 1';
   }
   if (playerTwo) {
-    playerTwo.value = 'Mia';
     playerTwo.placeholder = 'Ej. Mia';
     const label = playerTwo.closest('label');
     if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la persona 2';
