@@ -9,6 +9,8 @@ if css_link not in html:
     html = html.replace("</head>", css_link + "</head>", 1)
 
 js_path = Path("game-enhancements.js")
+import subprocess
+subprocess.run(["node", "--check", str(js_path)], check=True)
 enhancements = js_path.read_text(encoding="utf-8").strip()
 marker = "ENTREDOS_ENHANCEMENTS_V1"
 if marker not in html:
