@@ -8,6 +8,10 @@ let localAnswerStage = 1;
 let localRevealed = false;
 
 (function installEnhancementMarkup(){
+  const playerOne = $('#player1');
+  const playerTwo = $('#player2');
+  if (playerOne) playerOne.value = 'Persona 1';
+  if (playerTwo) playerTwo.value = 'Persona 2';
   const pickerFooter = $('.question-picker .picker-footer');
   if (pickerFooter && !$('#localQuestionCount')) {
     const control = document.createElement('label');
@@ -31,7 +35,7 @@ let localRevealed = false;
     const station = document.createElement('section');
     station.id = 'localAnswerStation';
     station.className = 'local-answer-station';
-    station.innerHTML = '<div class="local-answer-top"><div><span class="local-answer-kicker">EN PERSONA · POR TURNOS</span><h3 id="localAnswerTitle">Turno de Alex</h3><p id="localAnswerInstructions">Cada persona escribe su respuesta sin ver la del otro.</p></div><span class="local-answer-counter" id="localQuestionCounter">Pregunta 1 de 10</span></div><div id="localAnswerEntry"><label class="local-answer-label" id="localAnswerLabel" for="localAnswerInput">Respuesta de Alex</label><textarea id="localAnswerInput" maxlength="600" rows="4" placeholder="Escribe tu respuesta…"></textarea><div class="local-answer-entry-footer"><span id="localAnswerNote">La respuesta quedará oculta hasta que ambos hayáis respondido.</span><button type="button" class="btn btn-dark" id="localAnswerSubmit">Guardar respuesta ↗</button></div></div><div id="localAnswerReveal" class="local-answer-reveal" style="display:none"><div class="local-result-heading"><span>✦ RESULTADO</span><h3>Vuestras respuestas</h3><p>Leed lo que ha compartido cada uno y comentadlo juntos.</p></div><div class="local-result-grid"><article><span id="localResultName1">Alex</span><p id="localResultAnswer1"></p></article><article><span id="localResultName2">Sam</span><p id="localResultAnswer2"></p></article></div></div>';
+    station.innerHTML = '<div class="local-answer-top"><div><span class="local-answer-kicker">EN PERSONA · POR TURNOS</span><h3 id="localAnswerTitle">Turno de Persona 1</h3><p id="localAnswerInstructions">Cada persona escribe su respuesta sin ver la del otro.</p></div><span class="local-answer-counter" id="localQuestionCounter">Pregunta 1 de 10</span></div><div id="localAnswerEntry"><label class="local-answer-label" id="localAnswerLabel" for="localAnswerInput">Respuesta de Persona 1</label><textarea id="localAnswerInput" maxlength="600" rows="4" placeholder="Escribe tu respuesta…"></textarea><div class="local-answer-entry-footer"><span id="localAnswerNote">La respuesta quedará oculta hasta que ambos hayáis respondido.</span><button type="button" class="btn btn-dark" id="localAnswerSubmit">Guardar respuesta ↗</button></div></div><div id="localAnswerReveal" class="local-answer-reveal" style="display:none"><div class="local-result-heading"><span>✦ RESULTADO</span><h3>Vuestras respuestas</h3><p>Leed lo que ha compartido cada uno y comentadlo juntos.</p></div><div class="local-result-grid"><article><span id="localResultName1">Persona 1</span><p id="localResultAnswer1"></p></article><article><span id="localResultName2">Persona 2</span><p id="localResultAnswer2"></p></article></div></div>';
     promptCard.insertAdjacentElement('afterend', station);
   }
 
