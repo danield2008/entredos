@@ -1,0 +1,59 @@
+/* EntreDos: adaptación móvil sin cambios de contenido ni de funcionamiento. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:76px}
+body{overflow-x:hidden}
+@media(max-width:920px){.hero-copy,.hero-stage,.play-board,.play-copy,.remote-game-panel,.choice-panel,.question-picker-panel{min-width:0;box-sizing:border-box}}
+@media(max-width:680px){
+.container{width:calc(100% - 28px);max-width:100%}
+.nav{gap:9px;padding-left:14px;padding-right:14px}.brand{flex-shrink:0}.nav-right{margin-left:auto;flex-shrink:0}
+.menu-toggle{width:44px;height:44px;min-width:44px;display:grid;place-items:center;border-radius:12px}
+.nav-links.open{z-index:160;max-height:calc(100dvh - 66px);overflow-y:auto;overscroll-behavior:contain;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+.hero h1{font-size:clamp(39px,11.5vw,58px);line-height:.99;letter-spacing:-2.2px;overflow-wrap:anywhere}
+.hero-description,.section-sub,.section-top h2,.closing h2{overflow-wrap:anywhere}
+.hero-stage{width:100%;min-width:0;overflow:hidden}.hero-sun{max-width:83vw;max-height:83vw}.floating-note{max-width:min(155px,42vw)}
+.game-card{width:100%;text-align:left}.play-board{width:100%;min-width:0}
+.player-settings{grid-template-columns:1fr}.player-settings label{min-width:0}
+.player-settings input,.search-field input,.remote-field input,.remote-field select,.remote-round textarea,.picker-search input{font-size:16px}
+.deck-controls,.library-filters,.picker-tabs{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;flex-wrap:nowrap;scrollbar-width:thin;padding-bottom:8px}
+.deck-filter,.library-filter,.picker-tabs button{flex:0 0 auto;white-space:nowrap}
+.game-actions{gap:10px;flex-wrap:wrap}.game-actions>.icon-btn{min-height:44px}.actions-right{display:flex;gap:8px;flex-wrap:wrap;width:100%}.actions-right .btn{flex:1;min-width:0;min-height:44px;padding:11px 12px}
+.question-picker{padding:0;align-items:stretch}
+.question-picker-panel{width:100%;height:100dvh;min-height:100dvh;max-height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 14px calc(15px + env(safe-area-inset-bottom));border-radius:0;overflow:hidden}
+.picker-head{gap:10px}.picker-head>div{min-width:0}.picker-head h2{font-size:clamp(27px,8vw,32px);overflow-wrap:anywhere}
+.picker-close,.choice-close{width:44px;height:44px;min-width:44px;min-height:44px}
+.picker-tabs{margin-right:-2px}.picker-list{grid-template-columns:1fr;min-height:0;gap:8px}.picker-question{min-height:0;padding:13px;gap:10px}.picker-question-text{font-size:17px;overflow-wrap:anywhere}
+.picker-footer{gap:10px;padding-bottom:env(safe-area-inset-bottom)}.picker-footer .btn{min-height:44px}
+#jugar.play-open{padding:0!important;align-items:stretch;overflow-y:auto;overscroll-behavior:contain}
+#jugar.play-open .play-layout{width:100%;min-width:0}
+#jugar.play-open .play-board{width:100%;max-width:100%;min-height:100dvh;max-height:none;overflow:visible;padding:calc(16px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));border-radius:0}
+#jugar.play-open .board-top{gap:12px;align-items:flex-start;flex-direction:row}#jugar.play-open .board-top>div:first-child{min-width:0}
+#jugar.play-open .turn-label{line-height:1.5;overflow-wrap:anywhere}#jugar.play-open .board-actions{flex-shrink:0;gap:5px}
+#jugar.play-open .board-actions .icon-btn{min-height:40px;padding:9px;font-size:11px}
+#jugar.play-open .player-settings{grid-template-columns:1fr 1fr;gap:8px}
+#jugar.play-open .prompt-card{width:100%;min-height:clamp(290px,43svh,420px);padding:22px 18px}
+#jugar.play-open .prompt-text{font-size:clamp(29px,8.3vw,38px);line-height:1.16;overflow-wrap:anywhere}
+#jugar.play-open .prompt-bottom{gap:12px;flex-wrap:wrap}#jugar.play-open .game-actions{align-items:stretch}
+#jugar.play-open .game-actions>.icon-btn{width:100%;flex:auto}#jugar.play-open .actions-right{width:100%}#jugar.play-open .actions-right .btn{flex:1 1 120px}#jugar.play-open #playClose{white-space:nowrap}
+.choice-overlay,.remote-game-overlay{padding:0;align-items:stretch;overscroll-behavior:contain}
+.choice-panel,.remote-game-panel{width:100%;min-width:0;max-width:100%;height:100dvh;min-height:100dvh;max-height:100dvh;padding:calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));border:0;border-radius:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.choice-head{gap:10px}.choice-head>div,.remote-game-header>div{min-width:0}
+.choice-head h2{font-size:clamp(28px,8vw,36px);overflow-wrap:anywhere}
+.choice-cards,.remote-options{grid-template-columns:1fr;gap:10px;margin-top:20px}
+.choice-card,.remote-option{width:100%;min-width:0;min-height:0;padding:17px}
+.choice-icon,.remote-option>span{margin-bottom:12px}.choice-card strong,.remote-option strong{font-size:22px}.choice-card small,.remote-option small{font-size:12px}.choice-go,.remote-option b{padding-top:13px}
+.distance-panel .remote-step{min-width:0}.remote-field input,.remote-field select{min-height:46px}
+.remote-form-actions{gap:8px}.remote-form-actions button{min-width:0;flex:1;min-height:44px;padding-left:10px;padding-right:10px}
+.remote-game-header{gap:10px}.remote-game-header h2{font-size:clamp(26px,7.4vw,34px);overflow-wrap:anywhere}
+.remote-code-banner{width:100%;min-width:0;gap:14px;padding:15px}.remote-code-banner strong{font-size:clamp(25px,8vw,31px);letter-spacing:.1em;overflow-wrap:anywhere}
+.remote-code-actions{display:grid;grid-template-columns:1fr;gap:8px;width:100%}.remote-code-actions .btn{width:100%;min-height:44px}
+.remote-status{align-items:flex-start;line-height:1.5}.remote-status .status-dot{flex-shrink:0;margin-top:3px}
+.remote-question{width:100%;min-width:0;min-height:160px;padding:22px 17px;font-size:clamp(28px,8vw,36px);overflow-wrap:anywhere}
+.remote-answer-label{margin-top:17px}.remote-round textarea{box-sizing:border-box;min-height:120px;max-width:100%;font-size:16px}
+.remote-answer-actions,.remote-next-row{align-items:stretch;flex-direction:column;gap:10px}.remote-answer-actions .btn,.remote-next-row .btn{min-height:46px;width:100%}.remote-answer-status{font-size:11px}
+.remote-answer-grid{grid-template-columns:1fr}.remote-answer-grid article{min-width:0;padding:15px}.remote-answer-grid article p{font-size:18px;overflow-wrap:anywhere}.remote-global-error{overflow-wrap:anywhere}
+}
+@media(max-width:380px){
+.container{width:calc(100% - 24px)}.hero h1{font-size:clamp(36px,11.2vw,44px);letter-spacing:-1.8px}.hero-stage{min-height:350px}
+.floating-note{max-width:130px;padding:10px}.floating-note strong{font-size:12px}
+#jugar.play-open .board-top{flex-wrap:wrap}#jugar.play-open .board-actions{width:100%;justify-content:flex-end}#jugar.play-open .player-settings{grid-template-columns:1fr}
+.remote-code-banner strong{font-size:25px}
+}
