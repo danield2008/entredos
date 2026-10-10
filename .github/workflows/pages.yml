@@ -35,6 +35,8 @@ jobs:
                   raise SystemExit("No se encontró un cierre único de head")
               page.write_text(html.replace("</head>", link + "</head>", 1), encoding="utf-8")
           PY
+      - name: Aplicar respuestas, límites y compartir invitación
+        run: python deploy-enhancements.py
       - name: Preparar archivos estáticos
         uses: actions/upload-pages-artifact@v3
         with:
