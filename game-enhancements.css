@@ -59,3 +59,6 @@
  .remote-code-banner .remote-code-actions{width:100%;display:grid;grid-template-columns:1fr}
  .remote-code-banner .remote-code-actions .btn{min-height:44px;width:100%}
 }
+
+/* Ocultar los campos de nombres: el juego usa Persona 1 y Persona 2. */
+.player-settings{display:none!important}
