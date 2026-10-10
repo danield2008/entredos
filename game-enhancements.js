@@ -16,16 +16,16 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
   const playerOne = $('#player1');
   const playerTwo = $('#player2');
   if (playerOne) {
-    playerOne.value = '';
-    playerOne.placeholder = 'Escribe el nombre del chico';
+    playerOne.value = 'Carlos';
+    playerOne.placeholder = 'Nombre del chico';
     const label = playerOne.closest('label');
-    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre del chico';
+    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la persona 1';
   }
   if (playerTwo) {
-    playerTwo.value = '';
-    playerTwo.placeholder = 'Escribe el nombre de la chica';
+    playerTwo.value = 'Lucía';
+    playerTwo.placeholder = 'Nombre de la chica';
     const label = playerTwo.closest('label');
-    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la chica';
+    if (label?.childNodes[0]) label.childNodes[0].textContent = 'Nombre de la persona 2';
   }
 
   const gameGrid = $('#juegos .game-grid');
