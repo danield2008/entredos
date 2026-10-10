@@ -90,8 +90,8 @@ body.play-open{overflow:hidden}
 <header>
   <div class="container nav">
     <a class="brand" href="#inicio" aria-label="EntreDos, inicio"><span class="brand-mark">e·d</span><span>entre<span>dos</span></span></a>
-    <nav class="nav-links" id="navLinks" aria-label="Navegación principal"><a href="#juegos">Juegos</a><a href="#jugar">Jugar ahora</a><a href="#preguntas">Preguntas</a><a href="#ideas-cita">Ideas para una cita</a></nav>
-    <div class="nav-right"><a class="btn btn-dark btn-small" href="#jugar">Empezar juntos <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button></div>
+    <nav class="nav-links" id="navLinks" aria-label="Navegación principal"><a href="#juegos">Juegos</a><a href="#juegos" id="navStartPlay">Jugar ahora</a><a href="#preguntas">Preguntas</a><a href="#ideas-cita">Ideas para una cita</a></nav>
+    <div class="nav-right"><a class="btn btn-dark btn-small" href="#juegos" id="startTogetherBtn">Empezar juntos <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button></div>
   </div>
 </header>
 <main>
@@ -267,6 +267,7 @@ $$('.library-filter').forEach(b=>b.addEventListener('click',()=>{setLibraryFilte
 $('#questionSearch').addEventListener('input',()=>{visibleCount=9;renderLibrary()});$('#showMoreBtn').addEventListener('click',()=>{visibleCount+=9;renderLibrary()});
 $('#questionGrid').addEventListener('click',e=>{const b=e.target.closest('[data-library-start]');if(b)setSpecificQuestion(b.dataset.libraryStart)});
 $('#dateIdeaBtn').addEventListener('click',()=>{$('#dateIdeaText').textContent=dateIdeas[Math.floor(Math.random()*dateIdeas.length)]});
+$('#startTogetherBtn').addEventListener('click',e=>{e.preventDefault();startMode('questions')});$('#navStartPlay').addEventListener('click',e=>{e.preventDefault();startMode('questions')});
 $('#chooseInPerson').addEventListener('click',()=>{closeModeChooser();openQuestionPicker(chosenModeTopic)});
 $('#chooseRemote').addEventListener('click',()=>openDistanceSetup('options'));
 $('#modeChooserClose').addEventListener('click',closeModeChooser);
