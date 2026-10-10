@@ -81,3 +81,10 @@
  .start-guide-step small{font-size:11px}
  .player-name-guide{flex-direction:column;gap:4px;margin-top:0}
 }
+
+.remote-mode-summary{display:grid;gap:5px;padding:12px 14px;border:1px solid #e8dce8;border-radius:13px;background:#f8f1f8;margin-bottom:14px}
+.remote-mode-summary>span{font-size:9px;font-weight:900;letter-spacing:.14em;color:#a66d8a}
+.remote-mode-summary>strong{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:19px;color:#4a3158}
+.remote-mode-helper{margin:10px 0 18px;padding:11px 13px;border-radius:12px;background:#f8f1f8;color:#7d6f82;font-size:11px;line-height:1.65}
+.remote-mode-helper:empty{display:none}
+@media(max-width:680px){.remote-mode-summary{padding:11px 12px}.remote-mode-helper{margin:8px 0 14px}}
