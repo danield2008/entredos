@@ -91,3 +91,24 @@
 
 .local-mode-count-control{width:min(260px,100%);margin:4px 0 13px}
 .local-mode-count-control small{font-size:10px;color:#84768a;font-weight:700}
+
+
+/* Extra EntreDos features */
+.entredos-intensity-control{display:flex!important;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.entredos-intensity-control select{min-width:150px;border:1px solid var(--line);border-radius:10px;padding:10px;background:white}
+.entredos-extra-card{margin:24px auto;padding:clamp(18px,3vw,28px);border:1px solid var(--line);border-radius:22px;background:var(--paper2);max-width:900px}
+.entredos-extra-card h3{font-family:Georgia,serif;font-weight:500;font-size:clamp(24px,4vw,34px);margin:8px 0}
+.entredos-extra-card>p{color:var(--muted);font-size:13px}
+.entredos-planner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.entredos-planner-grid label{display:grid;gap:6px;font-size:11px;font-weight:800;color:var(--muted)}
+.entredos-planner-grid select{width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
+.entredos-date-result{margin-top:14px;padding:14px;border-radius:14px;background:#fff;line-height:1.7}
+.entredos-date-result:empty{display:none}
+.entredos-date-result h4{margin:0 0 6px;font-size:17px}
+.entredos-date-result p{margin:0 0 8px}
+.entredos-date-result small{color:var(--muted)}
+.entredos-skip{margin:8px 0 0}
+.entredos-qr-wrap{display:flex;align-items:center;flex-direction:column;gap:8px;padding:14px;margin-top:12px;border:1px solid var(--line);border-radius:14px;background:white;text-align:center}
+.entredos-qr-wrap img{width:180px;height:180px;object-fit:contain}
+.entredos-qr-wrap small{font-size:11px;color:var(--muted)}
+@media(max-width:560px){.entredos-planner-grid{grid-template-columns:1fr}.entredos-extra-card{margin:16px 0}}
