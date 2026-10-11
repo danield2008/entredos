@@ -680,3 +680,35 @@ $('#remoteShareInvite')?.addEventListener('click',()=>{
     wrap.hidden=false;
   }
 });
+
+
+/* Sync intensity in distance games, so both devices use the same preset. */
+(function addRemoteIntensity(){
+  const step=$('[data-remote-step="create"]');
+  if(step && !$('#remoteIntensityField')){
+    const field=document.createElement('label');field.id='remoteIntensityField';field.className='remote-field';
+    field.innerHTML='<span>Intensidad de la partida</span><select id="remoteIntensity"><option value="suave">Suave 🌸</option><option value="romantico" selected>Romántico ❤️</option><option value="profundo">Profundo 💭</option><option value="atrevido">Atrevido 🔥</option></select>';
+    const count=$('#remoteCreatorCount')?.closest('.remote-field');
+    if(count)count.insertAdjacentElement('afterend',field);else step.appendChild(field);
+  }
+})();
+const entredosRemoteRequestBase=remoteRequest;
+remoteRequest=async function(action,payload={}){
+  if(action==='create')payload={...payload,intensity:$('#remoteIntensity')?.value||entredosIntensity||'romantico'};
+  return entredosRemoteRequestBase(action,payload);
+};
+const entredosRemotePoolBase=remoteQuestionPool;
+remoteQuestionPool=function(room){
+  const pool=entredosRemotePoolBase(room);
+  const intensity=room?.intensity||'romantico';
+  const filtered=pool.filter(item=>{
+    const text=String(item?.text||'').toLowerCase();
+    const intimate=/(infancia|miedo|futuro|familia|herida|perdón|perdon|confianza|sueño|sueños|suenos|vulnerable|profund|intimidad|deseo|atracción|atraccion|secreto|fantasía|fantasia|atrev|beso|pasión|pasion)/i.test(text);
+    const playful=/(risa|divertid|comida|viaje|cita|película|pelicula|canción|cancion|juego|aventura|primera vez|sorpresa|bailar|cocinar|favorit)/i.test(text);
+    if(intensity==='suave')return !intimate||playful;
+    if(intensity==='profundo')return intimate;
+    if(intensity==='atrevido')return /(deseo|atracción|atraccion|intimidad|atrev|beso|pasión|pasion|fantasía|fantasia|coquete|romántic|romantic)/i.test(text);
+    return true;
+  });
+  return filtered.length>=5?filtered:pool;
+};
