@@ -712,3 +712,28 @@ remoteQuestionPool=function(room){
   });
   return filtered.length>=5?filtered:pool;
 };
+
+
+/* Apply the chosen intensity and no-repeat rule to every locally drawn round. */
+const entredosChooseItemBase=chooseItem;
+chooseItem=function(avoidCurrent=true){
+  const pool=(poolForMode()||[]);
+  if(!pool.length)return entredosChooseItemBase(avoidCurrent);
+  let options=pool.filter(item=>item?.text&&!entredosSeenPrompts.has(item.text)&&entredosPromptMatchesIntensity(item));
+  if(!options.length){
+    options=pool.filter(item=>item?.text&&!entredosSeenPrompts.has(item.text));
+  }
+  if(!options.length){
+    entredosSeenPrompts.clear();
+    options=pool.filter(item=>item?.text&&entredosPromptMatchesIntensity(item));
+  }
+  if(!options.length)options=pool;
+  let choices=options;
+  if(avoidCurrent&&current&&options.length>1){
+    const withoutCurrent=options.filter(item=>item.text!==current.text);
+    if(withoutCurrent.length)choices=withoutCurrent;
+  }
+  const item=choices[Math.floor(Math.random()*choices.length)];
+  if(item?.text)entredosSeenPrompts.add(item.text);
+  return item||entredosChooseItemBase(avoidCurrent);
+};
