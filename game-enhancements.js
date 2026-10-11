@@ -557,3 +557,126 @@ $('#player1').addEventListener('input', () => { if (!localRevealed) { $('#localA
 $('#player2').addEventListener('input', () => { if (!localRevealed) { $('#localAnswerTitle').textContent = 'Turno de ' + (localAnswerStage === 1 ? p1() : p2()); $('#localAnswerLabel').textContent = 'Respuesta de ' + (localAnswerStage === 1 ? p1() : p2()); } });
 $('#localFinalClose').addEventListener('click', closePlayWindow);
 $('#localFinalAgain').addEventListener('click', () => { closePlayWindow(); openModeChooser('all'); });
+
+/* ENTREDOS_EXTRA_V2: intensity presets, skip controls, no-repeat rounds, date planning and QR invite. */
+let entredosIntensity = 'romantico';
+let entredosSeenPrompts = new Set();
+const entredosIntensityNames = {suave:'Suave 🌸', romantico:'Romántico ❤️', profundo:'Profundo 💭', atrevido:'Atrevido 🔥'};
+
+(function addEntreDosExtraControls(){
+  const board = $('.play-board .player-settings') || $('#jugar .player-settings');
+  if (board && !$('#entredosIntensityControl')) {
+    const wrap = document.createElement('label');
+    wrap.id='entredosIntensityControl'; wrap.className='question-count-control entredos-intensity-control';
+    wrap.innerHTML='<span>Intensidad de la partida</span><select id="entredosIntensity"><option value="suave">Suave 🌸</option><option value="romantico" selected>Romántico ❤️</option><option value="profundo">Profundo 💭</option><option value="atrevido">Atrevido 🔥</option></select><small>Elegid el tono que os apetece compartir.</small>';
+    board.insertAdjacentElement('afterend',wrap);
+  }
+  const dateSetup = $('[data-mode="date"]') || $('[data-game="date"]');
+  const dateTarget = $('#ideas-cita') || $('#dateIdeas') || dateSetup?.closest('section');
+  if (dateTarget && !$('#entredosDatePlanner')) {
+    const planner=document.createElement('section'); planner.id='entredosDatePlanner'; planner.className='entredos-extra-card';
+    planner.innerHTML='<div class="eyebrow">PLAN DE CITA SORPRESA</div><h3>Una cita a vuestra medida</h3><p>Elegid vuestras condiciones y generad una idea para los dos.</p><div class="entredos-planner-grid"><label>Presupuesto<select id="edBudget"><option value="gratis">Gratis</option><option value="20">Hasta 20 €</option><option value="50" selected>Hasta 50 €</option><option value="100">Hasta 100 €</option><option value="flexible">Flexible</option></select></label><label>Tiempo disponible<select id="edTime"><option value="30">30 minutos</option><option value="60" selected>1–2 horas</option><option value="half">Media tarde</option><option value="day">Todo el día</option></select></label><label>Plan<select id="edPlace"><option value="either" selected>Nos da igual</option><option value="out">Salir de casa</option><option value="in">Quedarnos en casa</option></select></label><label>Estilo<select id="edStyle"><option value="surprise" selected>Sorpresa</option><option value="food">Comida</option><option value="creative">Creativo</option><option value="calm">Tranquilo</option><option value="adventure">Aventura</option></select></label></div><button type="button" class="btn btn-dark" id="edGenerateDate">Crear nuestro plan ↗</button><div id="edDateResult" class="entredos-date-result" aria-live="polite"></div>';
+    dateTarget.appendChild(planner);
+  }
+  const share = $('#remoteShareInvite');
+  if (share && !$('#entredosInviteQR')) {
+    const qr=document.createElement('div'); qr.id='entredosInviteQR'; qr.className='entredos-qr-wrap'; qr.hidden=true;
+    qr.innerHTML='<strong>Escanea para abrir EntreDos</strong><img id="entredosQRImage" alt="Código QR de invitación"><small>El código de sala también es necesario para unirse.</small>';
+    share.insertAdjacentElement('afterend',qr);
+  }
+})();
+
+function entredosApplyIntensity(){
+  const value=$('#entredosIntensity')?.value;
+  if(value && entredosIntensityNames[value]) entredosIntensity=value;
+}
+$('#entredosIntensity')?.addEventListener('change',entredosApplyIntensity);
+function entredosPromptMatchesIntensity(item){
+  const t=String(item?.text||'').toLowerCase();
+  const intimate=/(infancia|miedo|futuro|familia|herida|perdón|perdon|confianza|sueño|sueños|suenos|valor|recuerdo|vulnerable|profund|amor|intimidad|deseo|atracción|atraccion|secreto|fantasía|fantasia|atrev|beso|pasión|pasion)/i.test(t);
+  const playful=/(risa|divertid|comida|viaje|cita|película|pelicula|canción|cancion|juego|aventura|primera vez|sorpresa|bailar|cocinar|favorit)/i.test(t);
+  if(entredosIntensity==='suave') return !intimate || playful;
+  if(entredosIntensity==='profundo') return intimate;
+  if(entredosIntensity==='atrevido') return /(deseo|atracción|atraccion|intimidad|atrev|beso|pasión|pasion|fantasía|fantasia|coquete|romántic|romantic)/i.test(t);
+  return true;
+}
+function entredosChooseUnseen(){
+  const pool=(typeof poolForMode==='function'?poolForMode():[])||[];
+  const options=pool.filter(item=>item && item.text && !entredosSeenPrompts.has(item.text) && entredosPromptMatchesIntensity(item));
+  const fallback=pool.filter(item=>item && item.text && !entredosSeenPrompts.has(item.text));
+  const list=options.length?options:fallback;
+  if(!list.length) { entredosSeenPrompts.clear(); return; }
+  const choice=list[Math.floor(Math.random()*list.length)];
+  entredosSeenPrompts.add(choice.text);
+  if(typeof setSpecificQuestion==='function') setSpecificQuestion(choice.text);
+}
+const entredosBaseSetQuestion = setSpecificQuestion;
+setSpecificQuestion = function(text){
+  if(text) entredosSeenPrompts.add(text);
+  return entredosBaseSetQuestion(text);
+};
+const entredosBaseStartMode = startMode;
+startMode = function(nextMode){
+  entredosSeenPrompts.clear();
+  entredosIntensity = $('#entredosIntensity')?.value || entredosIntensity;
+  return entredosBaseStartMode(nextMode);
+};
+
+function entredosSkipCurrent(){
+  if(!$('#jugar')?.classList.contains('play-open')) return;
+  if(mode==='questions' && $('#jugar')?.classList.contains('local-question-active')){
+    if(localQuestionPosition>=localQuestionLimit){showLocalFinalResults();return;}
+    localQuestionPosition++; round++; localFirstAnswer=''; localSecondAnswer=''; localAnswerStage=1; localRevealed=false;
+    const pool=(poolForMode()||[]).filter(item=>item?.text&&!entredosSeenPrompts.has(item.text)&&entredosPromptMatchesIntensity(item));
+    const fallback=(poolForMode()||[]).filter(item=>item?.text&&!entredosSeenPrompts.has(item.text));
+    const list=pool.length?pool:fallback;
+    if(list.length){const choice=list[Math.floor(Math.random()*list.length)];entredosSeenPrompts.add(choice.text);entredosBaseSetQuestion(choice.text);}
+    else {entredosSeenPrompts.clear();entredosBaseNextQuestion();}
+    renderLocalAnswerStage(); toast('Pregunta saltada. Seguimos sin interrumpir la partida.'); return;
+  }
+  if(mode!=='questions' && $('#jugar')?.classList.contains('play-open')) {
+    const pool=(poolForMode()||[]).filter(item=>item?.text&&!entredosSeenPrompts.has(item.text)&&entredosPromptMatchesIntensity(item));
+    const fallback=(poolForMode()||[]).filter(item=>item?.text&&!entredosSeenPrompts.has(item.text));
+    const list=pool.length?pool:fallback;
+    if(list.length){const choice=list[Math.floor(Math.random()*list.length)];entredosSeenPrompts.add(choice.text);setSpecificQuestion(choice.text);}
+    else nextQuestion();
+    toast('Ronda saltada.'); return;
+  }
+  nextQuestion();
+}
+const entredosBaseNextQuestion = nextQuestion;
+const entredosBaseNextQuestionForSkip = nextQuestion;
+if($('#localAnswerStation') && !$('#entredosSkipQuestion')){
+  const btn=document.createElement('button');btn.id='entredosSkipQuestion';btn.type='button';btn.className='btn btn-light entredos-skip';btn.textContent='Saltar pregunta →';
+  $('#localAnswerSubmit')?.insertAdjacentElement('afterend',btn);
+  btn.addEventListener('click',entredosSkipCurrent);
+}
+function entredosDatePlan(){
+  const budget=$('#edBudget')?.value||'50', time=$('#edTime')?.value||'60', place=$('#edPlace')?.value||'either', style=$('#edStyle')?.value||'surprise';
+  const outside=place==='out', inside=place==='in';
+  const plans={
+    food: outside?'Elegid una cafetería o preparad una pequeña ruta de degustación.':inside?'Preparad juntos una cena temática con lo que tengáis en casa.':'Organizad una cita gastronómica: cocinar algo nuevo o probar un lugar cercano.',
+    creative: inside?'Haced un reto de dibujo mutuo, una playlist compartida o una manualidad.':'Visitad un mercado, una exposición o haced una sesión de fotos por vuestra zona.',
+    calm: inside?'Preparad bebidas, elegid una película y dejad los móviles apartados.':'Pasead por un parque tranquilo y terminad con vuestra bebida favorita.',
+    adventure: inside?'Preparad una búsqueda del tesoro en casa con pistas y pequeños premios.':'Elegid una ruta nueva, un lugar que no conozcáis o un reto fotográfico en pareja.',
+    surprise: inside?'Montad una cita sorpresa en casa: luces suaves, música y un juego de preguntas.':outside?'Elegid un lugar cercano al azar, pasead sin prisa y terminad con un pequeño capricho.':'Escribid tres planes cada uno, mezcladlos y elegid uno al azar.'
+  };
+  const timeLabel={30:'30 minutos',60:'1–2 horas',half:'media tarde',day:'todo el día'}[time];
+  const budgetLabel={gratis:'sin gastar dinero','20':'hasta 20 €','50':'hasta 50 €','100':'hasta 100 €',flexible:'presupuesto flexible'}[budget];
+  const result=$('#edDateResult');
+  result.replaceChildren();
+  const h=document.createElement('h4');h.textContent='Vuestra cita sugerida';
+  const p=document.createElement('p');p.textContent=plans[style]+' Duración: '+timeLabel+'. Presupuesto: '+budgetLabel+'.';
+  const note=document.createElement('small');note.textContent='Consejo: cada uno puede proponer un detalle sorpresa y guardar el recuerdo después.';
+  result.append(h,p,note);
+}
+$('#edGenerateDate')?.addEventListener('click',entredosDatePlan);
+$('#remoteShareInvite')?.addEventListener('click',()=>{
+  const code=$('#remoteRoomCode')?.textContent?.trim()||$('#remoteCode')?.textContent?.trim()||'';
+  const url=new URL(location.href); url.searchParams.set('sala',code);
+  const img=$('#entredosQRImage'); const wrap=$('#entredosInviteQR');
+  if(img && wrap && code && /^[A-HJ-NP-Z2-9]{6}$/.test(code)){
+    img.src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(url.toString());
+    wrap.hidden=false;
+  }
+});
