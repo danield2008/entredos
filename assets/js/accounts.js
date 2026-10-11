@@ -60,8 +60,7 @@
     try {
       const { data, error } = await promise;
       if (error) throw error;
-      if (data?.user) currentUser = data.user;
-      if (data?.session) currentUser = data.session.user;
+      currentUser = data?.session?.user || null;
       if (currentUser) { await loadProfile(); message('accountMessage', success || 'Listo.'); }
       else message('authMessage', success || 'Revisa tu correo para confirmar la cuenta.');
     } catch (e) { message('authMessage', e.message || 'No se pudo completar la operación.', true); message('accountMessage', e.message || 'No se pudo completar la operación.', true); }
@@ -150,7 +149,7 @@
     data.forEach(item => { const row=document.createElement('div'); row.className='account-list-item'; const title=document.createElement('strong'); title.textContent=item.title; const p=document.createElement('p'); p.textContent=item.body; const small=document.createElement('small'); small.textContent=(item.event_date || 'Sin fecha')+' · '+(item.shared_with_partner?'Compartido':'Solo para ti'); row.append(title,p,small); host.append(row); });
   }
   async function saveFavorite(item) {
-    if (!currentUser) { message('authMessage','Inicia sesión para guardar favoritos.'); showModal(); return false; }
+    if (!currentUser) { message('authMessage','Inicia sesión para guardar favoritos en tu cuenta.'); showModal(); return false; }
     const { error } = await client.from('entredos_favorites').upsert({
       user_id: currentUser.id, question_id: String(item.id || item.text).slice(0,180),
       question_text: String(item.text).slice(0,600), category: String(item.category || 'General').slice(0,60)
@@ -158,8 +157,14 @@
     if (error) { message('accountMessage',error.message,true); return false; }
     await renderFavorites(); return true;
   }
+  async function removeFavorite(item) {
+    if (!currentUser) return false;
+    const { error } = await client.from('entredos_favorites').delete().eq('user_id',currentUser.id).eq('question_id',String(item.id || item.text).slice(0,180));
+    if (error) { message('accountMessage',error.message,true); return false; }
+    await renderFavorites(); return true;
+  }
   window.EntreDosAccounts = {
-    client, get user(){ return currentUser; }, open:showModal, close:hideModal, saveFavorite,
+    client, get user(){ return currentUser; }, open:showModal, close:hideModal, saveFavorite, removeFavorite,
     async signOut(){ await client.auth.signOut(); currentUser=null; currentCoupleId=null; signedInUI(null,''); message('authMessage','Has cerrado sesión.'); }
   };
   document.addEventListener('DOMContentLoaded', () => {
