@@ -111,6 +111,14 @@
     message('accountMessage','¡Cuentas vinculadas! ❤️');
     await loadProfile();
   }
+  async function unlinkCouple() {
+    if (!confirm('¿Quieres desvincular las cuentas? Los recuerdos compartidos dejarán de estar visibles para la otra persona.')) return;
+    const { error } = await client.rpc('entredos_unlink_couple');
+    if (error) return message('accountMessage',error.message,true);
+    currentCoupleId = null;
+    message('accountMessage','Las cuentas se han desvinculado.');
+    await loadProfile();
+  }
   async function saveMemory() {
     if (!currentUser) return;
     const title = $('memoryTitle').value.trim(), body = $('memoryBody').value.trim();
@@ -166,6 +174,7 @@
     $('saveProfile')?.addEventListener('click',saveProfile);
     $('createInvite')?.addEventListener('click',createInvite);
     $('acceptInvite')?.addEventListener('click',acceptInvite);
+    $('unlinkCouple')?.addEventListener('click',unlinkCouple);
     $('saveMemory')?.addEventListener('click',saveMemory);
     $('accountSignOut')?.addEventListener('click',()=>window.EntreDosAccounts.signOut());
     $('copyInvite')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('inviteCodeResult').textContent);message('accountMessage','Código copiado.')}catch(e){message('accountMessage','Copia este código manualmente.')}});
