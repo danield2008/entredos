@@ -74,6 +74,12 @@
   async function signIn() {
     await runAuth(client.auth.signInWithPassword({ email: $('authEmail').value.trim(), password: $('authPassword').value }), 'Has iniciado sesión.');
   }
+  async function resetPassword() {
+    const email = $('authEmail').value.trim();
+    if (!email) return message('authMessage','Escribe primero tu correo electrónico.',true);
+    const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+    message('authMessage', error ? error.message : 'Si existe una cuenta con ese correo, recibirás un enlace para restablecer la contraseña.', !!error);
+  }
   async function oauth(provider) {
     const { error } = await client.auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + location.pathname } });
     if (error) message('authMessage', error.message, true);
@@ -154,6 +160,7 @@
     $('accountModal')?.addEventListener('click',e=>{if(e.target===$('accountModal'))hideModal()});
     $('authSignUp')?.addEventListener('click',signUp);
     $('authSignIn')?.addEventListener('click',signIn);
+    $('authReset')?.addEventListener('click',resetPassword);
     $('authGoogle')?.addEventListener('click',()=>oauth('google'));
     $('authApple')?.addEventListener('click',()=>oauth('apple'));
     $('saveProfile')?.addEventListener('click',saveProfile);
