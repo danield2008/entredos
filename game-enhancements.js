@@ -405,25 +405,22 @@ openModeChooser = function(topic = 'all') {
 };
 
 $('#chooseInPerson').addEventListener('click', event => {
+  // Este listener está en fase capture: debe abrir primero la preparación,
+  // nunca saltar directamente a las preguntas o a la partida.
   event.preventDefault();
   event.stopImmediatePropagation();
-  closeModeChooser();
-  if (selectedGameMode === 'questions') {
-    openQuestionPicker(chosenModeTopic);
-    return;
-  }
   mode = selectedGameMode;
-  deck = 'all';
+  if (selectedGameMode === 'questions') {
+    deck = chosenModeTopic && roomTopicNames[chosenModeTopic] ? chosenModeTopic : 'all';
+  } else {
+    deck = 'all';
+  }
   round = 1;
   used.clear();
-  $$('[data-deck]').forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
-  $$('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
-  restoreLocalGameView();
-  resetLocalModeSession();
-  renderQuestion();
-  openPlayWindow();
-  renderLocalAnswerStage();
-  renderLocalModeCountControl();
+  $( '[data-deck]' ).forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
+  $( '[data-mode]' ).forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
+  closeModeChooser();
+  showNamesScreen();
 }, true);
 
 document.addEventListener('click', event => {
