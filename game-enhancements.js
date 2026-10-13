@@ -36,12 +36,17 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
   }
 
   const playerSettings = $('.play-board .player-settings');
-  if (playerSettings && !$('#playerNameGuide')) {
+  const setupPanel = $('#inPersonSetup .person-setup-panel');
+  if (setupPanel && !$('#playerNameGuide')) {
     const nameGuide = document.createElement('div');
     nameGuide.id = 'playerNameGuide';
     nameGuide.className = 'player-name-guide';
-    nameGuide.innerHTML = '<strong>ANTES DE JUGAR</strong><span>Escribid vuestros nombres en los campos de arriba (es opcional). Después elegid un tema. La pantalla os irá diciendo a quién le toca y qué hacer.</span>';
-    playerSettings.insertAdjacentElement('afterend', nameGuide);
+    nameGuide.innerHTML = '<strong>ANTES DE JUGAR</strong><span>Escribid vuestros nombres, elegid el tono y el número de rondas. Después solo veréis una pregunta cada vez.</span>';
+    setupPanel.querySelector('.person-name-grid')?.insertAdjacentElement('afterend', nameGuide);
+  }
+  if (playerSettings) {
+    playerSettings.hidden = true;
+    playerSettings.setAttribute('aria-hidden','true');
   }
 
   const inPersonCopy = $('#chooseInPerson')?.querySelector('small');
@@ -58,7 +63,6 @@ const gameModeLabels = {questions:'Preguntas para conectar',who:'¿Quién de los
     modeCount.id = 'localModeCountControl';
     modeCount.className = 'question-count-control local-mode-count-control';
     modeCount.htmlFor = 'localModeCount';
-    modeCount.style.display = 'none';
     modeCount.innerHTML = '<span>Rondas por partida</span><select id="localModeCount" aria-label="Número de rondas"><option value="5">5 rondas</option><option value="10" selected>10 rondas</option><option value="15">15 rondas</option><option value="20">20 rondas</option></select><small id="localModeCountHint">Ronda 1 de 10</small>';
     nameGuideElement.insertAdjacentElement('afterend', modeCount);
   }
@@ -564,12 +568,13 @@ let entredosSeenPrompts = new Set();
 const entredosIntensityNames = {suave:'Suave 🌸', romantico:'Romántico ❤️', profundo:'Profundo 💭', atrevido:'Atrevido 🔥'};
 
 (function addEntreDosExtraControls(){
-  const board = $('.play-board .player-settings') || $('#jugar .player-settings');
-  if (board && !$('#entredosIntensityControl')) {
+  const setupPanel = $('#inPersonSetup .person-setup-panel');
+  if (setupPanel && !$('#entredosIntensityControl')) {
     const wrap = document.createElement('label');
     wrap.id='entredosIntensityControl'; wrap.className='question-count-control entredos-intensity-control';
     wrap.innerHTML='<span>Intensidad de la partida</span><select id="entredosIntensity"><option value="suave">Suave 🌸</option><option value="romantico" selected>Romántico ❤️</option><option value="profundo">Profundo 💭</option><option value="atrevido">Atrevido 🔥</option></select><small>Elegid el tono que os apetece compartir.</small>';
-    board.insertAdjacentElement('afterend',wrap);
+    $('#localModeCountControl')?.insertAdjacentElement('afterend',wrap);
+    if(!wrap.isConnected) setupPanel.appendChild(wrap);
   }
   const dateSetup = $('[data-mode="date"]') || $('[data-game="date"]');
   const dateTarget = $('#ideas-cita') || $('#dateIdeas') || dateSetup?.closest('section');
@@ -737,3 +742,10 @@ chooseItem=function(avoidCurrent=true){
   if(item?.text)entredosSeenPrompts.add(item.text);
   return item||entredosChooseItemBase(avoidCurrent);
 };
+
+/* Preparación y partida: separar ajustes de la pantalla de preguntas. */
+(function separateSetupFromQuestions(){
+ const style=document.createElement('style');
+ style.textContent = '#inPersonSetup .person-setup-panel #playerNameGuide{display:block;margin:20px 0 12px} #inPersonSetup .person-setup-panel #localModeCountControl,#inPersonSetup .person-setup-panel #entredosIntensityControl{display:grid!important;width:100%;margin:12px 0;gap:8px} #inPersonSetup .person-setup-panel .question-count-control select{width:100%;min-height:48px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:10px 14px;color:var(--ink);font:inherit;font-weight:750} #inPersonSetup .person-setup-panel .person-continue{margin-top:16px} #jugar.play-open .player-settings,#jugar.play-open .deck-controls,#jugar.play-open #playerNameGuide,#jugar.play-open #localModeCountControl,#jugar.play-open #entredosIntensityControl{display:none!important} #inPersonSetup .person-setup-panel #playerNameGuide{display:block!important}';
+ document.head.appendChild(style);
+})();
