@@ -417,8 +417,8 @@ $('#chooseInPerson').addEventListener('click', event => {
   }
   round = 1;
   used.clear();
-  $( '[data-deck]' ).forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
-  $( '[data-mode]' ).forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
+  $('[data-deck]').forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
+  $('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
   closeModeChooser();
   showNamesScreen();
 }, true);
