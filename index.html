@@ -391,7 +391,21 @@ $('#questionSearch').addEventListener('input',()=>{visibleCount=9;renderLibrary(
 $('#questionGrid').addEventListener('click',e=>{const b=e.target.closest('[data-library-start]');if(b)setSpecificQuestion(b.dataset.libraryStart)});
 $('#dateIdeaBtn').addEventListener('click',()=>{$('#dateIdeaText').textContent=dateIdeas[Math.floor(Math.random()*dateIdeas.length)]});
 $('#startTogetherBtn').addEventListener('click',e=>{e.preventDefault();startMode('questions')});$('#navStartPlay').addEventListener('click',e=>{e.preventDefault();startMode('questions')});
-$('#chooseInPerson').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();try{showNamesScreen()}catch(err){const setup=$('#inPersonSetup');setup.classList.add('open');setup.setAttribute('aria-hidden','false');document.body.classList.add('person-setup-open');const names=setup.querySelector('.person-setup-panel');if(names)names.style.display='block';console.error('EntreDos setup:',err)}});$('#personSetupClose').addEventListener('click',closePersonSetup);$('#inPersonSetup').addEventListener('click',e=>{if(e.target.closest('[data-person-close]'))closePersonSetup()});$('#personSetupContinue').addEventListener('click',continuePersonSetup);['personName1','personName2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();continuePersonSetup()}}));
+$('#chooseInPerson').onclick=null;
+$('#chooseInPerson').addEventListener('click',e=>{
+ e.preventDefault();e.stopImmediatePropagation();
+ const wrapper=$('#inPersonSetup'), form=wrapper?.querySelector('.person-setup-panel');
+ if(!wrapper||!form){console.error('No se encuentra el formulario de nombres');return}
+ const chooser=$('#modeChooser'),panel=chooser?.querySelector('.choice-panel');
+ if(form.parentElement!==wrapper)wrapper.appendChild(form);
+ if(panel){panel.querySelector('.choice-head').hidden=false;panel.querySelector('.choice-cards').hidden=false;panel.querySelector('.choice-foot').hidden=false;chooser.classList.remove('names-step','open');chooser.setAttribute('aria-hidden','true')}
+ closeQuestionPicker();closeDistanceSetup();closePlayWindow();hideTurnIntro();
+ $('#personName1').value='';$('#personName2').value='';$('#personSetupError').textContent='';
+ wrapper.style.display='flex';wrapper.style.visibility='visible';wrapper.style.pointerEvents='auto';
+ wrapper.classList.add('open');wrapper.setAttribute('aria-hidden','false');
+ document.body.classList.add('person-setup-open');
+ setTimeout(()=>$('#personName1').focus({preventScroll:true}),80);
+});$('#personSetupClose').addEventListener('click',closePersonSetup);$('#inPersonSetup').addEventListener('click',e=>{if(e.target.closest('[data-person-close]'))closePersonSetup()});$('#personSetupContinue').addEventListener('click',continuePersonSetup);['personName1','personName2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();continuePersonSetup()}}));
 $('#chooseRemote').addEventListener('click',()=>openDistanceSetup('options'));
 $('#modeChooserClose').addEventListener('click',closeModeChooser);
 $('#modeChooser').addEventListener('click',e=>{if(e.target.closest('[data-mode-close]'))closeModeChooser()});
