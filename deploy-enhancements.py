@@ -19,5 +19,22 @@ if marker not in html:
         raise SystemExit("No se encontró de forma única el punto de inicialización de EntreDos")
     html = html.replace(end_marker, "\n" + enhancements + "\ninit();\n})();", 1)
 
+# Comprobar el JavaScript final ya integrado, no solo cada archivo por separado.
+# Así se detectan errores que bloquearían init() y todos los modos de juego.
+import re
+inline_scripts = re.findall(r"<script\\b([^>]*)>([\\s\\S]*?)</script>", html, flags=re.IGNORECASE)
+built_script = next(
+    (body for attrs, body in inline_scripts if "ENTREDOS_ENHANCEMENTS_V1" in body and not re.search(r"\\bsrc\\s*=", attrs, flags=re.IGNORECASE)),
+    None,
+)
+if not built_script:
+    raise SystemExit("No se encontró el JavaScript integrado de EntreDos")
+check_path = Path(".entredos-build-check.js")
+try:
+    check_path.write_text(built_script, encoding="utf-8")
+    subprocess.run(["node", "--check", str(check_path)], check=True)
+finally:
+    check_path.unlink(missing_ok=True)
+
 page.write_text(html, encoding="utf-8")
-print("Mejoras de juego integradas para publicar.")
+print("Mejoras integradas y JavaScript completo validado.")
