@@ -450,7 +450,7 @@ $('#chooseInPerson').addEventListener('click',e=>{
  wrapper.classList.add('open');wrapper.setAttribute('aria-hidden','false');
  document.body.classList.add('person-setup-open');
  setTimeout(()=>$('#personName1').focus({preventScroll:true}),80);
-});$('#personSetupClose').addEventListener('click',closePersonSetup);$('#inPersonSetup').addEventListener('click',e=>{if(e.target.closest('[data-person-close]'))closePersonSetup()});document.addEventListener('click',e=>{const btn=e.target.closest('#personSetupContinue');if(!btn)return;e.preventDefault();e.stopPropagation();window.continuePersonSetup()},true);['personName1','personName2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();continuePersonSetup()}}));
+});$('#personSetupClose').addEventListener('click',closePersonSetup);$('#inPersonSetup').addEventListener('click',e=>{if(e.target.closest('[data-person-close]'))closePersonSetup()});const continueButton=$('#personSetupContinue');if(continueButton){continueButton.onclick=null;continueButton.addEventListener('click',e=>{e.preventDefault();window.continuePersonSetup()});}['personName1','personName2'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();continuePersonSetup()}}));
 $('#chooseRemote').addEventListener('click',()=>openDistanceSetup('options'));
 $('#modeChooserClose').addEventListener('click',closeModeChooser);
 $('#modeChooser').addEventListener('click',e=>{if(e.target.closest('[data-mode-close]'))closeModeChooser()});
