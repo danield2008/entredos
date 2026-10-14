@@ -405,22 +405,48 @@ openModeChooser = function(topic = 'all') {
 };
 
 $('#chooseInPerson').addEventListener('click', event => {
-  // Este listener está en fase capture: debe abrir primero la preparación,
-  // nunca saltar directamente a las preguntas o a la partida.
   event.preventDefault();
   event.stopImmediatePropagation();
-  mode = selectedGameMode;
-  if (selectedGameMode === 'questions') {
-    deck = chosenModeTopic && roomTopicNames[chosenModeTopic] ? chosenModeTopic : 'all';
-  } else {
-    deck = 'all';
+  // Abrir el formulario directamente, sin depender de funciones de otros módulos.
+  const wrapper = document.getElementById('inPersonSetup');
+  const form = wrapper && wrapper.querySelector('.person-setup-panel');
+  const chooser = document.getElementById('modeChooser');
+  if (!wrapper || !form) {
+    console.error('EntreDos: falta #inPersonSetup o .person-setup-panel');
+    return;
   }
-  round = 1;
-  used.clear();
-  $('[data-deck]').forEach(button => button.classList.toggle('active', button.dataset.deck === deck));
-  $('[data-mode]').forEach(button => button.classList.toggle('selected', button.dataset.mode === mode));
-  closeModeChooser();
-  showNamesScreen();
+  try {
+    mode = selectedGameMode;
+    deck = selectedGameMode === 'questions' && chosenModeTopic && roomTopicNames[chosenModeTopic] ? chosenModeTopic : 'all';
+    round = 1;
+    used.clear();
+    closeQuestionPicker();
+    closeDistanceSetup();
+    closePlayWindow();
+    hideTurnIntro();
+    if (form.parentElement !== wrapper) wrapper.appendChild(form);
+    if (chooser) {
+      chooser.classList.remove('open', 'names-step');
+      chooser.setAttribute('aria-hidden', 'true');
+    }
+  } catch (error) {
+    console.error('EntreDos: error preparando la partida', error);
+  } finally {
+    wrapper.style.setProperty('display', 'flex', 'important');
+    wrapper.style.setProperty('visibility', 'visible', 'important');
+    wrapper.style.setProperty('opacity', '1', 'important');
+    wrapper.style.setProperty('pointer-events', 'auto', 'important');
+    wrapper.classList.add('open');
+    wrapper.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('person-setup-open');
+    const n1 = document.getElementById('personName1');
+    const n2 = document.getElementById('personName2');
+    const err = document.getElementById('personSetupError');
+    if (n1) n1.value = '';
+    if (n2) n2.value = '';
+    if (err) err.textContent = '';
+    setTimeout(() => n1?.focus({preventScroll:true}), 80);
+  }
 }, true);
 
 document.addEventListener('click', event => {
