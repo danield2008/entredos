@@ -37,6 +37,11 @@ jobs:
           PY
       - name: Aplicar respuestas, límites y compartir invitación
         run: python deploy-enhancements.py
+      - name: Probar el flujo de los seis modos
+        run: |
+          mkdir -p /tmp/entredos-smoke
+          npm install --prefix /tmp/entredos-smoke --no-save --no-audit --no-fund jsdom@26
+          NODE_PATH=/tmp/entredos-smoke/node_modules node tests/smoke-entredos.cjs
       - name: Preparar archivos estáticos
         uses: actions/upload-pages-artifact@v3
         with:
