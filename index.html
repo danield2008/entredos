@@ -334,7 +334,12 @@ function showNamesScreen(){
 function openPersonSetup(){showNamesScreen()}
 function closePersonSetup(){
   const wrapper=$('#inPersonSetup');
-  if(wrapper){wrapper.classList.remove('open');wrapper.setAttribute('aria-hidden','true')}
+  if(wrapper){
+    wrapper.classList.remove('open');
+    wrapper.setAttribute('aria-hidden','true');
+    // Retirar los estilos inline !important que podían dejar la pantalla visible.
+    ['display','visibility','opacity','pointer-events'].forEach(property=>wrapper.style.removeProperty(property));
+  }
   document.body.classList.remove('person-setup-open');
   closeModeChooser();
 }
