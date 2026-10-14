@@ -377,7 +377,6 @@ window.continuePersonSetup=function continuePersonSetup(){
     console.error('EntreDos: error al abrir el cuestionario',err);
     error.textContent='No se ha podido abrir el cuestionario. Vuelve a intentarlo.';
   }
-}
 };
 function openQuestionPicker(which='all'){closeModeChooser();closeDistanceSetup();pickerDeck=which||'all';$('#pickerSearch').value='';renderPicker();$('#questionPicker').classList.add('open');$('#questionPicker').setAttribute('aria-hidden','false');document.body.classList.add('picker-open');$('#pickerClose').focus();}
 function closeQuestionPicker(){const picker=$('#questionPicker');if(!picker)return;picker.classList.remove('open');picker.setAttribute('aria-hidden','true');document.body.classList.remove('picker-open');}
