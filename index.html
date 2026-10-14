@@ -363,22 +363,12 @@ function continuePersonSetup(){
       error.textContent='No hay preguntas disponibles para este juego. Elige otro modo.';
       return;
     }
-    // Cierra las pantallas de configuración antes de pintar la pregunta.
-    // renderQuestion() muestra la transición "Es tu momento" si play-open ya
-    // está activo; por eso primero pintamos la pregunta y luego abrimos el juego.
+    // Cierra la configuración, pinta la pregunta y abre el juego después.
     closePersonSetup();
     closeModeChooser();
     closeQuestionPicker();
     closeDistanceSetup();
     hideTurnIntro();
-    const pool=poolForMode();
-    if(!pool || !pool.length){
-      error.textContent='No hay preguntas disponibles para este juego. Elige otro modo.';
-      document.getElementById('inPersonSetup')?.classList.add('open');
-      document.getElementById('inPersonSetup')?.setAttribute('aria-hidden','false');
-      document.body.classList.add('person-setup-open');
-      return;
-    }
     renderQuestion();
     openPlayWindow();
     updateTurn();
