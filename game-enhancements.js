@@ -432,10 +432,8 @@ $('#chooseInPerson').addEventListener('click', event => {
   } catch (error) {
     console.error('EntreDos: error preparando la partida', error);
   } finally {
-    wrapper.style.setProperty('display', 'flex', 'important');
-    wrapper.style.setProperty('visibility', 'visible', 'important');
-    wrapper.style.setProperty('opacity', '1', 'important');
-    wrapper.style.setProperty('pointer-events', 'auto', 'important');
+    // Controlar la visibilidad con la clase .open, no con estilos inline !important.
+    // closePersonSetup debe poder ocultar la capa al pasar a las preguntas.
     wrapper.classList.add('open');
     wrapper.setAttribute('aria-hidden', 'false');
     document.body.classList.add('person-setup-open');
