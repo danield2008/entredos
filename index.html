@@ -110,6 +110,11 @@ section.section{padding:86px 0}.section-top{display:flex;justify-content:space-b
 #inPersonSetup .person-name-field,#inPersonSetup .person-name-field input{pointer-events:auto;touch-action:manipulation}
 #inPersonSetup .person-name-field input{position:relative;z-index:3;user-select:text;-webkit-user-select:text;opacity:1}
 #inPersonSetup[aria-hidden="true"]{display:none!important}
+
+/* Pantalla de nombres: mismo fondo morado que la transición de turno. */
+#inPersonSetup.choice-overlay{background:rgba(39,24,47,.96);backdrop-filter:blur(15px)}
+#inPersonSetup .choice-backdrop{background:rgba(39,24,47,.96);backdrop-filter:blur(15px)}
+#inPersonSetup .person-setup-panel{background:linear-gradient(145deg,#fffaf7,#f2e8f4);border-color:#ffffff35}
 </style>
 
 <style>
@@ -334,16 +339,17 @@ function closePersonSetup(){
   closeModeChooser();
 }
 function continuePersonSetup(){
-  const first=$('#personName1').value.trim(), second=$('#personName2').value.trim();
+  const first=$('#personName1')?.value.trim()||'';
+  const second=$('#personName2')?.value.trim()||'';
   const error=$('#personSetupError');
   if(!first||!second){
     error.textContent='Escribid los dos nombres para saber de quién es cada turno.';
-    (!first?$('#personName1'):$('#personName2')).focus();
+    (!first?$('#personName1'):$('#personName2'))?.focus();
     return;
   }
   if(first.toLocaleLowerCase()===second.toLocaleLowerCase()){
     error.textContent='Usad dos nombres distintos para diferenciar los turnos.';
-    $('#personName2').focus();
+    $('#personName2')?.focus();
     return;
   }
   try {
@@ -352,20 +358,29 @@ function continuePersonSetup(){
     round=1;
     used.clear();
     error.textContent='';
-    // Cargar la pregunta antes de cerrar el formulario, para que un error no deje la pantalla bloqueada.
-    const chosen=chooseItem(false);
-    if(!chosen){
-      error.textContent='No hemos podido cargar preguntas para este modo. Prueba a elegir otro modo.';
+    const pool=poolForMode();
+    if(!pool || !pool.length){
+      error.textContent='No hay preguntas disponibles para este juego. Elige otro modo.';
       return;
     }
-    current=chosen;
+    // Prepara la primera pregunta y abre directamente el cuestionario.
+    current=chooseItem(false);
+    if(!current){
+      error.textContent='No hemos podido cargar la pregunta. Prueba otra vez.';
+      return;
+    }
     closePersonSetup();
+    closeModeChooser();
+    closeQuestionPicker();
+    closeDistanceSetup();
+    hideTurnIntro();
     openPlayWindow();
     renderQuestion();
-    showTurnIntro();
-  } catch (err) {
-    console.error('EntreDos: no se pudo iniciar la partida',err);
-    error.textContent='Ha ocurrido un error al iniciar la partida. Vuelve a intentarlo.';
+    updateTurn();
+    document.getElementById('jugar')?.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch(err) {
+    console.error('EntreDos: error al abrir el cuestionario',err);
+    error.textContent='No se ha podido abrir el cuestionario. Vuelve a intentarlo.';
   }
 }
 function openQuestionPicker(which='all'){closeModeChooser();closeDistanceSetup();pickerDeck=which||'all';$('#pickerSearch').value='';renderPicker();$('#questionPicker').classList.add('open');$('#questionPicker').setAttribute('aria-hidden','false');document.body.classList.add('picker-open');$('#pickerClose').focus();}
