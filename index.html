@@ -363,19 +363,24 @@ function continuePersonSetup(){
       error.textContent='No hay preguntas disponibles para este juego. Elige otro modo.';
       return;
     }
-    // Prepara la primera pregunta y abre directamente el cuestionario.
-    current=chooseItem(false);
-    if(!current){
-      error.textContent='No hemos podido cargar la pregunta. Prueba otra vez.';
-      return;
-    }
+    // Cierra las pantallas de configuración antes de pintar la pregunta.
+    // renderQuestion() muestra la transición "Es tu momento" si play-open ya
+    // está activo; por eso primero pintamos la pregunta y luego abrimos el juego.
     closePersonSetup();
     closeModeChooser();
     closeQuestionPicker();
     closeDistanceSetup();
     hideTurnIntro();
-    openPlayWindow();
+    const pool=poolForMode();
+    if(!pool || !pool.length){
+      error.textContent='No hay preguntas disponibles para este juego. Elige otro modo.';
+      document.getElementById('inPersonSetup')?.classList.add('open');
+      document.getElementById('inPersonSetup')?.setAttribute('aria-hidden','false');
+      document.body.classList.add('person-setup-open');
+      return;
+    }
     renderQuestion();
+    openPlayWindow();
     updateTurn();
     document.getElementById('jugar')?.scrollIntoView({behavior:'smooth',block:'start'});
   } catch(err) {
