@@ -22,9 +22,9 @@ if marker not in html:
 # Comprobar el JavaScript final ya integrado, no solo cada archivo por separado.
 # Así se detectan errores que bloquearían init() y todos los modos de juego.
 import re
-inline_scripts = re.findall(r"<script\\b([^>]*)>([\\s\\S]*?)</script>", html, flags=re.IGNORECASE)
+inline_scripts = re.findall(r"<script\b([^>]*)>([\s\S]*?)</script>", html, flags=re.IGNORECASE)
 built_script = next(
-    (body for attrs, body in inline_scripts if "ENTREDOS_ENHANCEMENTS_V1" in body and not re.search(r"\\bsrc\\s*=", attrs, flags=re.IGNORECASE)),
+    (body for attrs, body in inline_scripts if "ENTREDOS_ENHANCEMENTS_V1" in body and not re.search(r"\bsrc\s*=", attrs, flags=re.IGNORECASE)),
     None,
 )
 if not built_script:
