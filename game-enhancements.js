@@ -764,6 +764,20 @@ chooseItem=function(avoidCurrent=true){
   return item||entredosChooseItemBase(avoidCurrent);
 };
 
+/* Actualizar el encabezado al abrir la partida, después de leer los nombres introducidos. */
+const entredosContinuePersonSetupForNamedTurn = window.continuePersonSetup;
+window.continuePersonSetup = function(...args) {
+  localQuestionPosition = 1;
+  localQuestionHistory = [];
+  localFirstAnswer = '';
+  localSecondAnswer = '';
+  localAnswerStage = 1;
+  localRevealed = false;
+  const result = entredosContinuePersonSetupForNamedTurn.apply(this, args);
+  renderLocalAnswerStage();
+  return result;
+};
+
 /* Preparación y partida: separar ajustes de la pantalla de preguntas. */
 (function separateSetupFromQuestions(){
  const style=document.createElement('style');
