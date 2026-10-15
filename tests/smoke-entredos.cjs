@@ -61,6 +61,14 @@ for (const [index, mode] of modes.entries()) {
   }
   assert.ok(document.getElementById('promptText').textContent.trim(), 'No hay pregunta visible en el modo ' + mode);
 
+  if (mode === 'questions') {
+    const turnHeading = document.getElementById('localAnswerTitle');
+    assert.equal(turnHeading.textContent, 'Turno de Alex' + index, 'El encabezado debe mostrar el nombre del primer turno');
+    document.getElementById('localAnswerInput').value = 'Mi respuesta de prueba';
+    document.getElementById('localAnswerSubmit').click();
+    assert.equal(turnHeading.textContent, 'Turno de Sam' + index, 'El encabezado debe cambiar al nombre del segundo turno');
+  }
+
   document.getElementById('playClose').click();
 }
 
