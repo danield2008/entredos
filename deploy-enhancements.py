@@ -16,7 +16,7 @@ marker = "ENTREDOS_ENHANCEMENTS_V1"
 if marker not in html:
     end_marker = "\ninit();\n})();"
     if html.count(end_marker) != 1:
-        raise SystemExit("No se encontró de forma única el punto de inicialización de EntreDos")
+        raise SystemExit("No se encontró de forma única el punto de inicialización de Cercora")
     html = html.replace(end_marker, "\n" + enhancements + "\ninit();\n})();", 1)
 
 # Comprobar el JavaScript final ya integrado, no solo cada archivo por separado.
@@ -28,7 +28,7 @@ built_script = next(
     None,
 )
 if not built_script:
-    raise SystemExit("No se encontró el JavaScript integrado de EntreDos")
+    raise SystemExit("No se encontró el JavaScript integrado de Cercora")
 check_path = Path(".entredos-build-check.js")
 try:
     check_path.write_text(built_script, encoding="utf-8")
@@ -37,4 +37,4 @@ finally:
     check_path.unlink(missing_ok=True)
 
 page.write_text(html, encoding="utf-8")
-print("Mejoras integradas y JavaScript completo validado.")
+print("Mejoras de Cercora integradas y JavaScript completo validado.")

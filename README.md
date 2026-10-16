@@ -1,6 +1,6 @@
-# EntreDos — Más conexión, menos rutina
+# Cercora — Más cerca, pregunta a pregunta
 
-EntreDos es una web estática en español con preguntas y pequeños juegos para compartir en pareja.
+Cercora es una web estática en español con preguntas, juegos y planes para compartir en pareja.
 
 ## Incluye
 - Seis formas de jugar: preguntas para conectar, ¿quién de los dos?, verdad o reto, recuerdos, planes de cita y charla profunda.

@@ -1,4 +1,4 @@
-/* EntreDos: adaptación móvil sin cambios de contenido ni de funcionamiento. */
+/* Cercora: adaptación móvil sin cambios de funcionamiento. */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:76px}
 body{overflow-x:hidden}
 @media(max-width:920px){.hero-copy,.hero-stage,.play-board,.play-copy,.remote-game-panel,.choice-panel,.question-picker-panel{min-width:0;box-sizing:border-box}}

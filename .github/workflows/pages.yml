@@ -1,4 +1,4 @@
-name: Publicar EntreDos
+name: Publicar Cercora
 on:
   push:
     branches: [main]

@@ -1,4 +1,4 @@
-/* EntreDos account layer. Uses only the Supabase publishable/anon key in the browser. */
+/* Cercora account layer. Keeps existing Supabase schema and API identifiers for compatibility. */
 (() => {
   const SUPABASE_URL = 'https://reqfdhjajfopgafuzjkv.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_0T1d0DAdtXL4YV1wWoLceA_wrgLVvmU';

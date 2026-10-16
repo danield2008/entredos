@@ -1,4 +1,4 @@
-/* EntreDos: respuestas en persona, resultados y botones legibles. */
+/* Cercora: respuestas en persona, resultados y botones legibles. */
 .question-count-control{display:flex;flex-direction:column;gap:7px;min-width:165px;color:#786b7b;font-size:10px;font-weight:900}
 .question-count-control select{width:100%;min-height:43px;border:1px solid #e3d6e2;border-radius:12px;background:#fff;color:#302438;padding:10px 12px;font:inherit;font-size:12px;outline:none}
 .question-count-control select:focus{border-color:#9378a2;box-shadow:0 0 0 3px #6a4b7815}
@@ -93,7 +93,7 @@
 .local-mode-count-control small{font-size:10px;color:#84768a;font-weight:700}
 
 
-/* Extra EntreDos features */
+/* Extra Cercora features */
 .entredos-intensity-control{display:flex!important;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
 .entredos-intensity-control select{min-width:150px;border:1px solid var(--line);border-radius:10px;padding:10px;background:white}
 .entredos-extra-card{margin:24px auto;padding:clamp(18px,3vw,28px);border:1px solid var(--line);border-radius:22px;background:var(--paper2);max-width:900px}

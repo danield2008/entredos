@@ -412,7 +412,7 @@ $('#chooseInPerson').addEventListener('click', event => {
   const form = wrapper && wrapper.querySelector('.person-setup-panel');
   const chooser = document.getElementById('modeChooser');
   if (!wrapper || !form) {
-    console.error('EntreDos: falta #inPersonSetup o .person-setup-panel');
+    console.error('Cercora: falta #inPersonSetup o .person-setup-panel');
     return;
   }
   try {
@@ -430,7 +430,7 @@ $('#chooseInPerson').addEventListener('click', event => {
       chooser.setAttribute('aria-hidden', 'true');
     }
   } catch (error) {
-    console.error('EntreDos: error preparando la partida', error);
+    console.error('Cercora: error preparando la partida', error);
   } finally {
     // Controlar la visibilidad con la clase .open, no con estilos inline !important.
     // closePersonSetup debe poder ocultar la capa al pasar a las preguntas.
@@ -607,7 +607,7 @@ const entredosIntensityNames = {suave:'Suave 🌸', romantico:'Romántico ❤️
   const share = $('#remoteShareInvite');
   if (share && !$('#entredosInviteQR')) {
     const qr=document.createElement('div'); qr.id='entredosInviteQR'; qr.className='entredos-qr-wrap'; qr.hidden=true;
-    qr.innerHTML='<strong>Escanea para abrir EntreDos</strong><img id="entredosQRImage" alt="Código QR de invitación"><small>El código de sala también es necesario para unirse.</small>';
+    qr.innerHTML='<strong>Escanea para abrir Cercora</strong><img id="entredosQRImage" alt="Código QR de invitación"><small>El código de sala también es necesario para unirse.</small>';
     share.insertAdjacentElement('afterend',qr);
   }
 })();
