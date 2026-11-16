@@ -98,6 +98,8 @@ section.section{padding:86px 0}.section-top{display:flex;justify-content:space-b
 #inPersonSetup.choice-overlay{background:rgba(39,24,47,.96);backdrop-filter:blur(15px)}
 #inPersonSetup .choice-backdrop{background:rgba(39,24,47,.96);backdrop-filter:blur(15px)}
 #inPersonSetup .person-setup-panel{background:linear-gradient(145deg,#fffaf7,#f2e8f4);border-color:#ffffff35}
+
+.footer-legal-links{font-size:11px;color:var(--muted)}.footer-legal-links a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 </style>
 
 <style>
@@ -254,7 +256,7 @@ body.play-open{overflow:hidden}
 <div class="remote-reveal" id="remoteReveal" hidden><div class="remote-reveal-heading"><span>♡</span><h3>Vuestras respuestas</h3><p>Ahora podéis leer lo que ha escrito cada uno.</p></div><div class="remote-answer-grid"><article><span id="remoteHostName">Persona 1</span><p id="remoteHostAnswer"></p></article><article><span id="remoteGuestDisplayName">Persona 2</span><p id="remoteGuestAnswer"></p></article></div><div class="remote-next-row"><span id="remoteNextHint">Los dos habéis respondido.</span><button class="btn btn-dark" id="remoteNext" type="button">Siguiente pregunta →</button></div></div></div>
 <div class="remote-finished" id="remoteFinished" hidden><span>♡</span><h3>Habéis llegado al final</h3><p>Gracias por compartir este rato, incluso estando lejos.</p><button class="btn btn-dark" id="remoteFinish" type="button">Terminar partida</button></div><p class="remote-global-error" id="remoteGlobalError" role="alert"></p>
 </section></div></main>
-<footer><div class="container"><div class="footer-main"><a class="brand" href="#inicio"><span class="brand-mark">♡</span><span>cerco<span>ra</span></span></a><p class="footer-note">Un espacio para hablar, reír y volver a elegiros.</p><div class="footer-links"><a href="#juegos">Juegos</a><a href="#preguntas">Preguntas</a><a href="#ideas-cita">Ideas para una cita</a></div></div><div class="footer-bottom"><span>© <span id="yearNow"></span> Cercora. Hecho para compartir de verdad.</span><span>Respeto · Escucha · Complicidad</span></div></div></footer>
+<footer><div class="container"><div class="footer-main"><a class="brand" href="#inicio"><span class="brand-mark">♡</span><span>cerco<span>ra</span></span></a><p class="footer-note">Un espacio para hablar, reír y volver a elegiros.</p><div class="footer-links"><a href="#juegos">Juegos</a><a href="#preguntas">Preguntas</a><a href="#ideas-cita">Ideas para una cita</a></div></div><div class="footer-bottom"><span>© <span id="yearNow"></span> Cercora. Hecho para compartir de verdad.</span><span class="footer-legal-links"><a href="./privacidad.html">Privacidad</a> · <a href="./cookies.html">Cookies</a> · <a href="./aviso-legal.html">Aviso legal</a> · <a href="./contacto.html">Contacto</a></span></div></div></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 (()=>{'use strict';
