@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Política de privacidad | Cercora</title>
+<meta name="description" content="Información sobre los datos tratados al utilizar los juegos y la función online de Cercora.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://cercora.eu/privacidad.html">
+<style>
+:root{color-scheme:light;--paper:#f7f2eb;--card:#fffdf9;--ink:#2d2334;--muted:#776c7c;--line:#e7dfe5;--plum:#4a3158}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.75 Inter,system-ui,sans-serif}
+main{width:min(850px,calc(100% - 32px));margin:0 auto;padding:36px 0 64px}article{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,5vw,42px)}
+a{color:var(--plum)}h1,h2{font-family:Georgia,serif;letter-spacing:-.03em}h1{font-size:clamp(32px,5vw,44px);line-height:1.1}h2{margin-top:30px;font-size:24px}
+p,li{color:var(--muted)}strong{color:var(--ink)}.back{display:inline-block;margin-bottom:20px;text-decoration:none;font-weight:700}
+.notice{padding:16px;border:1px solid #bd8b51;background:#fff5e8;border-radius:14px;color:#62472d}.notice strong{color:#62472d}
+</style></head><body><main>
+<a class="back" href="./index.html">← Volver a Cercora</a>
+<article>
+<h1>Política de privacidad</h1>
+<p><strong>Última actualización:</strong> 16 de noviembre de 2026.</p>
+<div class="notice"><strong>Documento pendiente de completar.</strong> Falta identificar al responsable, su domicilio y un correo válido para solicitudes de privacidad. La descripción técnica debe revisarse si cambian las funciones, los proveedores o la retención de datos.</div>
+<h2>1. Responsable del tratamiento</h2>
+<p>Nombre comercial: <strong>Cercora</strong>.</p>
+<p>Responsable legal: <strong>PENDIENTE DE COMPLETAR CON NOMBRE Y APELLIDOS O DENOMINACIÓN SOCIAL REAL</strong>.</p>
+<p>NIF/NIE/CIF, cuando proceda: <strong>PENDIENTE DE COMPLETAR</strong>.</p>
+<p>Domicilio: <strong>PENDIENTE DE COMPLETAR</strong>.</p>
+<p>Correo para privacidad: <strong>PENDIENTE DE FACILITAR Y VERIFICAR</strong>.</p>
+<h2>2. Funciones y datos que se guardan en el navegador</h2>
+<p>La biblioteca de preguntas y los juegos funcionan principalmente en el navegador. La aplicación puede guardar en el almacenamiento local del dispositivo, mediante la tecnología <code>localStorage</code>, preguntas que la persona marca como favoritas bajo la clave <code>entredos-saved</code>. Ese contenido permanece en el navegador hasta que se borre desde las opciones del propio sitio/navegador o se eliminen los datos del sitio.</p>
+<p>La función de sala remota puede guardar bajo la clave <code>entredos-online-session</code> un código de sala, un token aleatorio de sesión y el rol de la persona para permitir reanudar la sala en ese navegador. No se trata de una cuenta de usuario permanente.</p>
+<h2>3. Datos tratados en la función online</h2>
+<p>Cuando una persona crea o se une a una sala, el navegador envía a la función remota de Cercora datos necesarios para prestar esa función: nombre o apodo (limitado por la aplicación), código de sala, tema, modo de juego, intensidad elegida, límite de preguntas, rol y token aleatorio. Al responder se envía el texto introducido en la respuesta (hasta 600 caracteres), asociado al código de sala y a la ronda correspondiente.</p>
+<p>El servicio remoto utiliza Supabase, alojado en la región de la Unión Europea (eu-west-1, Irlanda). La función del servidor aplica límites de intentos y utiliza un hash HMAC de la dirección IP obtenida de la infraestructura de red para controlar abusos; no se guarda la dirección IP en claro en esa tabla de límites. Las respuestas se muestran a cada participante solo cuando ambos han respondido.</p>
+<p>Las salas contienen una fecha de expiración y la aplicación deja de permitir el acceso cuando esa fecha ha pasado. No se ha verificado una política de borrado físico automático en la base de datos, por lo que no se promete un plazo concreto de eliminación. La duración efectiva de los registros debe confirmarse en la configuración de Supabase antes de publicar esta política como definitiva.</p>
+<h2>4. Proveedores y destinatarios</h2>
+<p>El sitio está alojado mediante GitHub Pages. La función online utiliza Supabase para almacenar temporalmente el estado de las salas, los nombres, las respuestas y los datos técnicos descritos arriba. Estos proveedores pueden tratar datos técnicos de conexión y seguridad conforme a sus propias políticas.</p>
+<p>En la versión publicada de Cercora no se ha instalado el código de Google AdSense en la pantalla interactiva del juego. Tampoco se ha identificado una herramienta de analítica propia. Si se incorporan proveedores adicionales, esta política debe actualizarse antes de activar el tratamiento.</p>
+<h2>5. Finalidades y bases jurídicas</h2>
+<p>El almacenamiento local permite recordar preguntas guardadas y reanudar una sala en el mismo dispositivo. Los datos enviados a Supabase permiten crear, mantener y sincronizar una sala entre dos participantes. La base jurídica aplicable debe determinarse atendiendo a la configuración definitiva del servicio y a la relación con la persona usuaria; el responsable debe documentarla antes del lanzamiento.</p>
+<h2>6. Menores y datos sensibles</h2>
+<p>Cercora está concebida para conversaciones entre parejas y puede inducir a compartir información personal, íntima o sensible en las respuestas. No se debe introducir información sobre salud, vida sexual, orientación sexual, conflictos graves, terceros identificables u otros datos sensibles que no sean necesarios. El servicio no está diseñado para recoger deliberadamente datos de menores; el responsable debe definir y publicar su criterio de edad y medidas aplicables antes del lanzamiento.</p>
+<h2>7. Derechos</h2>
+<p>La persona usuaria puede tener derechos de acceso, rectificación, supresión, limitación, oposición y portabilidad, y retirar un consentimiento cuando el tratamiento se base en él. Para ejercerlos se necesita un correo válido: <strong>PENDIENTE DE FACILITAR</strong>. También puede presentarse una reclamación ante la <a href="https://www.aepd.es/" target="_blank" rel="noopener noreferrer">Agencia Española de Protección de Datos</a>.</p>
+<h2>8. Cambios</h2>
+<p>Esta política deberá actualizarse cuando cambien las funciones, los proveedores, las transferencias, los plazos de conservación o los mecanismos de consentimiento.</p>
+<p><a href="./aviso-legal.html">Aviso legal</a> · <a href="./cookies.html">Política de cookies</a> · <a href="./contacto.html">Contacto</a></p>
+</article></main></body></html>
